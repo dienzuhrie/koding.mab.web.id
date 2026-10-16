@@ -95,6 +95,26 @@ export function UploadIcon({ className, size = 24 }: IconProps) {
   );
 }
 
+export function UsersIcon({ className, size = 18 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">
+      <circle cx="9" cy="8" r="3.5" />
+      <path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6" />
+      <path d="M16 8.5a3 3 0 1 0 0-5.9" />
+      <path d="M18.5 14.3c2.3.6 4 2.6 4 5.7" />
+    </svg>
+  );
+}
+
+export function TrendUpIcon({ className, size = 18 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">
+      <path d="m3 16 6-6 4 4 7-8" />
+      <path d="M15 6h5v5" />
+    </svg>
+  );
+}
+
 export function LogoutIcon({ className, size = 18 }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">

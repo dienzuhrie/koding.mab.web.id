@@ -47,9 +47,9 @@ export default async function HomePage() {
       </nav>
 
       <header className="relative overflow-hidden bg-brand-900 px-8 pt-22 pb-18 rounded-b-3xl">
-        <div className="pointer-events-none absolute -top-20 -left-16 w-[340px] h-[340px] rounded-full bg-brand-500 opacity-45 blur-3xl animate-aurora-1" />
-        <div className="pointer-events-none absolute -bottom-24 -right-10 w-[380px] h-[380px] rounded-full bg-accent-400 opacity-30 blur-3xl animate-aurora-2" />
-        <div className="pointer-events-none absolute top-[40%] left-1/2 w-64 h-64 rounded-full bg-brand-400 opacity-25 blur-3xl animate-aurora-3" />
+        <div className="pointer-events-none absolute -top-20 -left-16 w-[380px] h-[380px] rounded-full bg-white opacity-25 blur-3xl animate-aurora-1" />
+        <div className="pointer-events-none absolute -bottom-24 -right-10 w-[420px] h-[420px] rounded-full bg-white opacity-15 blur-3xl animate-aurora-2" />
+        <div className="pointer-events-none absolute top-[35%] left-1/2 w-72 h-72 rounded-full bg-brand-300 opacity-20 blur-3xl animate-aurora-3" />
 
         <div className="relative max-w-2xl mx-auto sm:mx-0">
           <div className="inline-block bg-accent-400/15 border border-accent-400/40 text-accent-300 text-xs font-bold px-3.5 py-1.5 rounded-full mb-5">

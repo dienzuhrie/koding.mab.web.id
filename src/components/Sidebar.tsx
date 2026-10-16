@@ -10,6 +10,7 @@ import {
   BriefcaseIcon,
   LayersIcon,
   ClipboardCheckIcon,
+  UsersIcon,
   LogoutIcon,
 } from "@/components/icons";
 
@@ -30,6 +31,7 @@ const guruNav: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: HomeIcon },
   { href: "/dashboard/admin/materi", label: "Kelola Materi", icon: LayersIcon },
   { href: "/dashboard/admin/kuis", label: "Kelola Kuis", icon: ClipboardCheckIcon },
+  { href: "/dashboard/admin/siswa", label: "Kelola Siswa", icon: UsersIcon },
   { href: "/dashboard/project", label: "Review Project", icon: BriefcaseIcon },
 ];
 

@@ -1,16 +1,56 @@
 import Link from "next/link";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { CheckIcon, UploadIcon } from "@/components/icons";
+import {
+  CheckIcon,
+  UploadIcon,
+  LayersIcon,
+  BookIcon,
+  ClipboardCheckIcon,
+  BriefcaseIcon,
+  UsersIcon,
+  TrendUpIcon,
+} from "@/components/icons";
 
 export default async function DashboardPage() {
   const session = await auth();
   const user = session!.user;
 
   if (user.role === "guru") {
-    return <GuruDashboard />;
+    return <GuruDashboard userName={user.name ?? ""} />;
   }
   return <SiswaDashboard userId={Number(user.id)} userName={user.name ?? ""} />;
+}
+
+function AuroraBanner({
+  eyebrow,
+  title,
+  subtitle,
+  initials,
+}: {
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  initials: string;
+}) {
+  return (
+    <div className="relative overflow-hidden bg-brand-900 rounded-3xl px-7 py-8 mb-8">
+      <div className="pointer-events-none absolute -top-16 -left-10 w-72 h-72 rounded-full bg-white opacity-20 blur-3xl animate-aurora-1" />
+      <div className="pointer-events-none absolute -bottom-20 -right-6 w-80 h-80 rounded-full bg-white opacity-10 blur-3xl animate-aurora-2" />
+      <div className="relative flex justify-between items-center flex-wrap gap-4">
+        <div>
+          <div className="text-accent-300 text-xs font-extrabold tracking-wide mb-1.5">
+            {eyebrow}
+          </div>
+          <h1 className="text-2xl font-extrabold text-white mb-1">{title}</h1>
+          <p className="text-sm text-brand-100">{subtitle}</p>
+        </div>
+        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-brand-400 to-brand-700 flex items-center justify-center text-white font-extrabold text-sm shadow-lg shrink-0">
+          {initials}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 async function SiswaDashboard({
@@ -74,33 +114,38 @@ async function SiswaDashboard({
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-7 flex-wrap gap-3">
-        <div>
-          <div className="text-sm text-muted font-semibold">
-            Selamat datang kembali,
-          </div>
-          <h1 className="text-2xl font-extrabold mt-0.5">{userName}</h1>
-        </div>
-        <div className="w-11 h-11 rounded-full bg-gradient-to-br from-brand-500 to-brand-800 flex items-center justify-center text-accent-300 font-extrabold">
-          {userName.slice(0, 2).toUpperCase()}
-        </div>
-      </div>
+      <AuroraBanner
+        eyebrow="SELAMAT DATANG KEMBALI"
+        title={userName}
+        subtitle="Ayo lanjutkan progress belajar koding kamu hari ini."
+        initials={userName.slice(0, 2).toUpperCase()}
+      />
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4.5 mb-8">
         <StatCard
+          icon={BookIcon}
+          tint="brand"
           label="MATERI SELESAI"
           value={`${selesaiCount} / ${totalMateri}`}
         />
         <StatCard
+          icon={TrendUpIcon}
+          tint="accent"
           label="RATA-RATA KUIS"
           value={rataKuis !== null ? `${rataKuis}/100` : "—"}
         />
-        <StatCard label="PROJECT DIUPLOAD" value={String(projectCount)} />
+        <StatCard
+          icon={BriefcaseIcon}
+          tint="brand"
+          label="PROJECT DIUPLOAD"
+          value={String(projectCount)}
+        />
       </div>
 
       {nextProgress && (
-        <div className="bg-gradient-to-br from-brand-800 to-brand-900 rounded-2xl p-6 flex justify-between items-center flex-wrap gap-4 mb-8">
-          <div>
+        <div className="relative overflow-hidden bg-gradient-to-br from-brand-700 to-brand-900 rounded-2xl p-6 flex justify-between items-center flex-wrap gap-4 mb-8">
+          <div className="pointer-events-none absolute -bottom-10 -right-10 w-48 h-48 rounded-full bg-white opacity-10 blur-3xl" />
+          <div className="relative">
             <div className="text-accent-300 text-xs font-bold mb-1.5">
               LANJUTKAN BELAJAR
             </div>
@@ -111,7 +156,7 @@ async function SiswaDashboard({
           </div>
           <Link
             href={`/dashboard/materi/${nextProgress.materi.babId}`}
-            className="bg-accent-400 text-brand-800 font-extrabold text-sm px-5.5 py-3 rounded-xl whitespace-nowrap"
+            className="relative bg-accent-400 text-brand-800 font-extrabold text-sm px-5.5 py-3 rounded-xl whitespace-nowrap hover:bg-accent-300 transition-colors"
           >
             Lanjut Belajar →
           </Link>
@@ -126,7 +171,7 @@ async function SiswaDashboard({
         {activity.map((a, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 bg-white border border-border-soft rounded-xl px-4 py-3.5"
+            className="flex items-center gap-3 bg-white border border-border-soft rounded-xl px-4 py-3.5 hover:shadow-sm transition-shadow"
           >
             <div
               className={`w-8.5 h-8.5 rounded-lg flex items-center justify-center ${
@@ -148,7 +193,7 @@ async function SiswaDashboard({
   );
 }
 
-async function GuruDashboard() {
+async function GuruDashboard({ userName }: { userName: string }) {
   const [babCount, materiCount, pendingProject, aksesSiswa] = await Promise.all([
     prisma.kodingBab.count(),
     prisma.kodingMateri.count(),
@@ -156,44 +201,101 @@ async function GuruDashboard() {
     prisma.kodingUserAccess.count({ where: { role: "siswa", status: "active" } }),
   ]);
 
+  const quickActions = [
+    {
+      href: "/dashboard/admin/materi",
+      icon: LayersIcon,
+      title: "Kelola Materi",
+      desc: "Atur BAB, video YouTube, dan dokumen",
+    },
+    {
+      href: "/dashboard/admin/kuis",
+      icon: ClipboardCheckIcon,
+      title: "Kelola Kuis",
+      desc: "Buat soal dan kunci jawaban",
+    },
+    {
+      href: "/dashboard/admin/siswa",
+      icon: UsersIcon,
+      title: "Kelola Siswa",
+      desc: "Beri akses login ke akun SIMADU",
+    },
+    {
+      href: "/dashboard/project",
+      icon: BriefcaseIcon,
+      title: "Review Project",
+      desc: "Terima atau minta revisi project siswa",
+    },
+  ];
+
   return (
     <div>
-      <h1 className="text-2xl font-extrabold mb-7">Dashboard Guru</h1>
+      <AuroraBanner
+        eyebrow="DASHBOARD GURU"
+        title={`Halo, ${userName}`}
+        subtitle="Kelola materi, kuis, dan project siswa dari sini."
+        initials={userName.slice(0, 2).toUpperCase()}
+      />
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4.5 mb-8">
-        <StatCard label="TOTAL BAB" value={String(babCount)} />
-        <StatCard label="TOTAL MATERI" value={String(materiCount)} />
-        <StatCard label="PROJECT MENUNGGU REVIEW" value={String(pendingProject)} />
-        <StatCard label="SISWA AKTIF" value={String(aksesSiswa)} />
+        <StatCard icon={LayersIcon} tint="brand" label="TOTAL BAB" value={String(babCount)} />
+        <StatCard icon={BookIcon} tint="brand" label="TOTAL MATERI" value={String(materiCount)} />
+        <StatCard
+          icon={BriefcaseIcon}
+          tint="accent"
+          label="PROJECT MENUNGGU REVIEW"
+          value={String(pendingProject)}
+        />
+        <StatCard icon={UsersIcon} tint="brand" label="SISWA AKTIF" value={String(aksesSiswa)} />
       </div>
-      <div className="flex gap-3 flex-wrap">
-        <Link
-          href="/dashboard/admin/materi"
-          className="bg-brand-800 text-white font-bold text-sm px-5 py-3 rounded-xl"
-        >
-          Kelola Materi
-        </Link>
-        <Link
-          href="/dashboard/admin/kuis"
-          className="bg-white border border-border-soft font-bold text-sm px-5 py-3 rounded-xl"
-        >
-          Kelola Kuis
-        </Link>
-        <Link
-          href="/dashboard/project"
-          className="bg-white border border-border-soft font-bold text-sm px-5 py-3 rounded-xl"
-        >
-          Review Project
-        </Link>
+
+      <h2 className="text-[17px] font-extrabold mb-3.5">Aksi Cepat</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {quickActions.map((a) => (
+          <Link
+            key={a.href}
+            href={a.href}
+            className="group flex items-center gap-4 bg-white border border-border-soft rounded-2xl p-5 hover:border-brand-400 hover:shadow-md transition-all"
+          >
+            <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center shrink-0 group-hover:bg-brand-700 group-hover:text-white transition-colors">
+              <a.icon size={20} />
+            </div>
+            <div className="flex-1">
+              <div className="font-extrabold text-sm">{a.title}</div>
+              <div className="text-xs text-muted">{a.desc}</div>
+            </div>
+            <span className="text-muted group-hover:text-brand-700 group-hover:translate-x-0.5 transition-all">
+              →
+            </span>
+          </Link>
+        ))}
       </div>
     </div>
   );
 }
 
-function StatCard({ label, value }: { label: string; value: string }) {
+function StatCard({
+  icon: Icon,
+  tint,
+  label,
+  value,
+}: {
+  icon: (props: { className?: string; size?: number }) => React.ReactElement;
+  tint: "brand" | "accent";
+  label: string;
+  value: string;
+}) {
   return (
-    <div className="bg-white rounded-2xl p-5 border border-border-soft">
-      <div className="text-xs text-muted font-bold mb-2">{label}</div>
-      <div className="text-[28px] font-extrabold text-brand-800">{value}</div>
+    <div className="bg-white rounded-2xl p-5 border border-border-soft hover:shadow-sm transition-shadow">
+      <div
+        className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3.5 ${
+          tint === "brand" ? "bg-brand-50 text-brand-700" : "bg-accent-400/15 text-accent-500"
+        }`}
+      >
+        <Icon size={19} />
+      </div>
+      <div className="text-xs text-muted font-bold mb-1.5">{label}</div>
+      <div className="text-[26px] font-extrabold text-brand-800">{value}</div>
     </div>
   );
 }

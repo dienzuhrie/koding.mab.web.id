@@ -9,8 +9,9 @@ export default function LoginPage() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-brand-900 flex items-center justify-center p-8">
-      <div className="pointer-events-none absolute -top-24 -left-20 w-96 h-96 rounded-full bg-brand-500 opacity-45 blur-3xl animate-aurora-1" />
-      <div className="pointer-events-none absolute -bottom-28 -right-16 w-[26rem] h-[26rem] rounded-full bg-accent-400 opacity-30 blur-3xl animate-aurora-2" />
+      <div className="pointer-events-none absolute -top-24 -left-20 w-96 h-96 rounded-full bg-white opacity-25 blur-3xl animate-aurora-1" />
+      <div className="pointer-events-none absolute -bottom-28 -right-16 w-[26rem] h-[26rem] rounded-full bg-white opacity-15 blur-3xl animate-aurora-2" />
+      <div className="pointer-events-none absolute top-[30%] left-[55%] w-64 h-64 rounded-full bg-brand-300 opacity-20 blur-3xl animate-aurora-3" />
 
       <div className="relative w-full max-w-md bg-white rounded-3xl p-10 shadow-2xl">
         <div className="flex items-center gap-2.5 mb-7">
