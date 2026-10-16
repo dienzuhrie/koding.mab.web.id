@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
@@ -11,6 +12,7 @@ import {
   LayersIcon,
   ClipboardCheckIcon,
   UsersIcon,
+  PanelToggleIcon,
   LogoutIcon,
 } from "@/components/icons";
 
@@ -35,20 +37,88 @@ const guruNav: NavItem[] = [
   { href: "/dashboard/project", label: "Review Project", icon: BriefcaseIcon },
 ];
 
+const STORAGE_KEY = "mab-sidebar-collapsed";
+
 export default function Sidebar({ role }: { role: "siswa" | "guru" }) {
   const pathname = usePathname();
   const items = role === "guru" ? guruNav : siswaNav;
+  const [collapsed, setCollapsed] = useState(false);
+  const hydrated = useRef(false);
+
+  // Muat preferensi tersimpan sekali saat mount.
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === "1") setCollapsed(true);
+    } catch {
+      // abaikan, localStorage tidak tersedia
+    } finally {
+      hydrated.current = true;
+    }
+  }, []);
+
+  // Auto-collapse saat siswa membuka Materi Belajar, supaya video lebih lega.
+  useEffect(() => {
+    if (pathname.startsWith("/dashboard/materi")) {
+      setCollapsed(true);
+    }
+  }, [pathname]);
+
+  function toggle() {
+    setCollapsed((c) => {
+      const next = !c;
+      try {
+        localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
+      } catch {
+        // abaikan
+      }
+      return next;
+    });
+  }
 
   return (
-    <aside className="w-60 shrink-0 bg-brand-900 px-4 py-6 flex flex-col min-h-full">
-      <div className="flex items-center gap-2.5 px-1.5 mb-3">
-        <div className="w-8 h-8 rounded-lg bg-accent-400 flex items-center justify-center font-extrabold text-brand-800 text-sm">
-          M
+    <aside
+      className={`shrink-0 bg-brand-900 py-6 flex flex-col min-h-full transition-[width] duration-300 ease-in-out ${
+        collapsed ? "w-[76px] px-3" : "w-60 px-4"
+      }`}
+    >
+      <div
+        className={`flex items-center mb-3 ${
+          collapsed ? "justify-center" : "justify-between px-1.5"
+        }`}
+      >
+        <div className={`flex items-center gap-2.5 ${collapsed ? "" : ""}`}>
+          <div className="w-8 h-8 rounded-lg bg-accent-400 flex items-center justify-center font-extrabold text-brand-800 text-sm shrink-0">
+            M
+          </div>
+          {!collapsed && (
+            <span className="text-white font-extrabold text-sm whitespace-nowrap">
+              MAB Coding
+            </span>
+          )}
         </div>
-        <span className="text-white font-extrabold text-sm">MAB Coding</span>
+        {!collapsed && (
+          <button
+            onClick={toggle}
+            title="Ciutkan menu"
+            className="text-brand-100 hover:text-white hover:bg-white/5 rounded-lg p-1.5 transition-colors"
+          >
+            <PanelToggleIcon size={16} />
+          </button>
+        )}
       </div>
 
-      {role === "guru" && (
+      {collapsed && (
+        <button
+          onClick={toggle}
+          title="Perluas menu"
+          className="mx-auto mb-3 text-brand-100 hover:text-white hover:bg-white/5 rounded-lg p-1.5 transition-colors"
+        >
+          <PanelToggleIcon size={16} />
+        </button>
+      )}
+
+      {!collapsed && role === "guru" && (
         <span className="mx-1.5 mb-6 inline-block w-fit text-[10px] font-extrabold tracking-wide text-accent-300 bg-accent-400/10 px-2.5 py-1 rounded-full">
           MODE GURU
         </span>
@@ -64,14 +134,17 @@ export default function Sidebar({ role }: { role: "siswa" | "guru" }) {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+              title={collapsed ? item.label : undefined}
+              className={`flex items-center gap-2.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                collapsed ? "justify-center px-0" : "px-3.5"
+              } ${
                 active
                   ? "bg-accent-400/15 text-accent-300 font-bold"
                   : "text-brand-100 hover:bg-white/5"
               }`}
             >
               <Icon className="shrink-0" />
-              {item.label}
+              {!collapsed && item.label}
             </Link>
           );
         })}
@@ -79,10 +152,13 @@ export default function Sidebar({ role }: { role: "siswa" | "guru" }) {
 
       <button
         onClick={() => signOut({ callbackUrl: "/" })}
-        className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-brand-100 hover:bg-white/5 transition-colors mt-4"
+        title={collapsed ? "Keluar" : undefined}
+        className={`flex items-center gap-2.5 py-2.5 rounded-xl text-sm font-semibold text-brand-100 hover:bg-white/5 transition-colors mt-4 ${
+          collapsed ? "justify-center px-0" : "px-3.5"
+        }`}
       >
         <LogoutIcon className="shrink-0" />
-        Keluar
+        {!collapsed && "Keluar"}
       </button>
     </aside>
   );

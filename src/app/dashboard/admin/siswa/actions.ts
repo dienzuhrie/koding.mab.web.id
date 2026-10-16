@@ -3,6 +3,32 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 
+export async function searchUsers(query: string) {
+  const q = query.trim();
+  if (q.length < 2) return [];
+
+  const users = await prisma.user.findMany({
+    where: {
+      isActive: 1,
+      OR: [{ nama: { contains: q } }, { email: { contains: q } }],
+    },
+    select: {
+      id: true,
+      nama: true,
+      email: true,
+      kodingAccess: { select: { id: true } },
+    },
+    take: 15,
+  });
+
+  return users.map((u) => ({
+    id: u.id,
+    nama: u.nama,
+    email: u.email,
+    hasAccess: !!u.kodingAccess,
+  }));
+}
+
 export async function grantAccess(formData: FormData) {
   const userId = Number(formData.get("userId"));
   const role = String(formData.get("role")) as "siswa" | "guru";

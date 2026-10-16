@@ -10,15 +10,15 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
 
-  --color-brand-50: #eafaf0;
-  --color-brand-100: #d7f5e4;
-  --color-brand-300: #86e0b8;
-  --color-brand-400: #34d399;
-  --color-brand-500: #10b981;
-  --color-brand-600: #0f7a52;
-  --color-brand-700: #047857;
-  --color-brand-800: #0e6b4d;
-  --color-brand-900: #0e3d30;
+  --color-brand-50: #e8faf5;
+  --color-brand-100: #d2f5ec;
+  --color-brand-300: #7fe0cc;
+  --color-brand-400: #2dd9b8;
+  --color-brand-500: #0fb399;
+  --color-brand-600: #0f8a73;
+  --color-brand-700: #077063;
+  --color-brand-800: #0e6358;
+  --color-brand-900: #0d3a36;
 
   --color-accent-300: #fde047;
   --color-accent-400: #facc15;
@@ -76,4 +76,33 @@ body {
 .protected-media {
   -webkit-user-select: none;
   user-select: none;
+}
+
+/* Transisi halaman "mengalir" via View Transition API (React <ViewTransition>) */
+@keyframes page-flow-out {
+  to {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.99);
+    filter: blur(3px);
+  }
+}
+@keyframes page-flow-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(1.01);
+    filter: blur(3px);
+  }
+}
+::view-transition-old(*) {
+  animation: 420ms cubic-bezier(0.4, 0, 0.2, 1) both page-flow-out;
+}
+::view-transition-new(*) {
+  animation: 420ms cubic-bezier(0.4, 0, 0.2, 1) both page-flow-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
+  }
 }
