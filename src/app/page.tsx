@@ -39,7 +39,7 @@ export default async function HomePage() {
           </a>
           <Link
             href="/login"
-            className="bg-accent-400 text-brand-800 font-extrabold text-sm px-5 py-2.5 rounded-full"
+            className="btn-press bg-accent-400 text-brand-800 font-extrabold text-sm px-5 py-2.5 rounded-full"
           >
             Masuk
           </Link>
@@ -51,7 +51,7 @@ export default async function HomePage() {
         <div className="pointer-events-none absolute -bottom-24 -right-10 w-[420px] h-[420px] rounded-full bg-white opacity-15 blur-3xl animate-aurora-2" />
         <div className="pointer-events-none absolute top-[35%] left-1/2 w-72 h-72 rounded-full bg-brand-300 opacity-20 blur-3xl animate-aurora-3" />
 
-        <div className="relative max-w-2xl mx-auto sm:mx-0">
+        <div className="reveal relative max-w-2xl mx-auto sm:mx-0">
           <div className="inline-block bg-accent-400/15 border border-accent-400/40 text-accent-300 text-xs font-bold px-3.5 py-1.5 rounded-full mb-5">
             BELAJAR KODING BARENG MAB
           </div>
@@ -68,13 +68,13 @@ export default async function HomePage() {
           <div className="flex gap-3.5 flex-wrap">
             <a
               href="#karya"
-              className="bg-accent-400 text-brand-800 font-extrabold text-[15px] px-6.5 py-3.5 rounded-xl"
+              className="btn-press bg-accent-400 text-brand-800 font-extrabold text-[15px] px-6.5 py-3.5 rounded-xl"
             >
               Lihat Karya Siswa
             </a>
             <Link
               href="/login"
-              className="bg-white/10 border border-white/25 text-white font-bold text-[15px] px-6.5 py-3.5 rounded-xl"
+              className="btn-press bg-white/10 border border-white/25 text-white font-bold text-[15px] px-6.5 py-3.5 rounded-xl"
             >
               Masuk Belajar →
             </Link>
@@ -95,7 +95,7 @@ export default async function HomePage() {
           {featuredProjects.map((p) => (
             <div
               key={p.id}
-              className="bg-white rounded-2xl overflow-hidden border border-border-soft shadow-sm"
+              className="card-lift bg-white rounded-2xl overflow-hidden border border-border-soft shadow-sm hover:shadow-lg hover:border-brand-300"
             >
               <div className="h-[150px] bg-gradient-to-br from-brand-500 to-brand-800 flex items-center justify-center text-accent-300 font-extrabold text-sm">
                 {p.linkDemo ? (
@@ -142,11 +142,14 @@ export default async function HomePage() {
             <Link
               key={bab.id}
               href="/login"
-              className="relative block rounded-2xl overflow-hidden border border-border-soft"
+              className="card-lift group relative block rounded-2xl overflow-hidden border border-border-soft hover:shadow-lg hover:border-brand-300"
             >
               <div className="h-[100px] bg-gradient-to-br from-brand-700 to-brand-900" />
               <div className="absolute inset-0 bg-brand-900/45 flex items-center justify-center">
-                <LockIcon size={22} className="text-accent-300" />
+                <LockIcon
+                  size={22}
+                  className="text-accent-300 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6"
+                />
               </div>
               <div className="p-3 bg-white">
                 <div className="text-[13px] font-bold">

@@ -13,7 +13,7 @@ export default function LoginPage() {
       <div className="pointer-events-none absolute -bottom-28 -right-16 w-[26rem] h-[26rem] rounded-full bg-white opacity-15 blur-3xl animate-aurora-2" />
       <div className="pointer-events-none absolute top-[30%] left-[55%] w-64 h-64 rounded-full bg-brand-300 opacity-20 blur-3xl animate-aurora-3" />
 
-      <div className="relative w-full max-w-md bg-white rounded-3xl p-10 shadow-2xl">
+      <div className="reveal relative w-full max-w-md bg-white rounded-3xl p-10 shadow-2xl">
         <div className="flex items-center gap-2.5 mb-7">
           <div className="w-9 h-9 rounded-xl bg-accent-400 flex items-center justify-center font-extrabold text-brand-800">
             M
@@ -37,7 +37,7 @@ export default function LoginPage() {
               type="email"
               required
               placeholder="nama@sekolah.sch.id"
-              className="w-full px-3.5 py-3 rounded-xl border-[1.5px] border-border-soft text-sm outline-none focus:border-brand-500"
+              className="input-focus w-full px-3.5 py-3 rounded-xl border-[1.5px] border-border-soft text-sm"
             />
           </div>
 
@@ -51,7 +51,7 @@ export default function LoginPage() {
               type="password"
               required
               placeholder="••••••••"
-              className="w-full px-3.5 py-3 rounded-xl border-[1.5px] border-border-soft text-sm outline-none focus:border-brand-500"
+              className="input-focus w-full px-3.5 py-3 rounded-xl border-[1.5px] border-border-soft text-sm"
             />
           </div>
 
@@ -62,7 +62,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={pending}
-            className="mt-1 bg-accent-400 text-brand-800 font-extrabold text-sm py-3 rounded-xl hover:bg-accent-300 transition-colors disabled:opacity-60"
+            className="btn-press mt-1 bg-accent-400 text-brand-800 font-extrabold text-sm py-3 rounded-xl hover:bg-accent-300 transition-colors disabled:opacity-60"
           >
             {pending ? "Memeriksa..." : "Masuk"}
           </button>

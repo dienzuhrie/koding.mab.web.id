@@ -24,7 +24,7 @@ export default function BabCard({
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="w-full flex justify-between items-center gap-3 px-4.5 py-4 bg-brand-50 text-left"
+        className="w-full flex justify-between items-center gap-3 px-4.5 py-4 bg-brand-50 text-left transition-colors hover:bg-brand-100"
       >
         <div>
           <div className="text-[11px] font-bold text-brand-600">

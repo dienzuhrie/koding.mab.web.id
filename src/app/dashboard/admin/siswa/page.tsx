@@ -34,7 +34,7 @@ export default async function AdminSiswaPage() {
         {accessList.map((a) => (
           <div
             key={a.id}
-            className="flex items-center justify-between gap-3 bg-white border border-border-soft rounded-xl px-4 py-3.5"
+            className="card-lift flex items-center justify-between gap-3 bg-white border border-border-soft rounded-xl px-4 py-3.5 hover:shadow-sm"
           >
             <div>
               <div className="text-sm font-bold flex items-center gap-2">

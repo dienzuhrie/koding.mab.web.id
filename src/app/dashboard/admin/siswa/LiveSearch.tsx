@@ -45,7 +45,7 @@ export default function LiveSearch() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="contoh: Rangga atau rangga@gmail.com"
-        className="w-full px-3.5 py-2.5 rounded-lg border border-border-soft text-sm mb-3"
+        className="input-focus w-full px-3.5 py-2.5 rounded-lg border border-border-soft text-sm mb-3"
       />
 
       {query.trim().length >= 2 && (
@@ -56,7 +56,7 @@ export default function LiveSearch() {
           {results.map((u) => (
             <div
               key={u.id}
-              className="flex items-center justify-between gap-3 bg-white border border-border-soft rounded-xl px-4 py-3"
+              className="reveal card-lift flex items-center justify-between gap-3 bg-white border border-border-soft rounded-xl px-4 py-3 hover:shadow-sm"
             >
               <div>
                 <div className="text-sm font-bold">{u.nama}</div>
@@ -71,7 +71,7 @@ export default function LiveSearch() {
                   <input type="hidden" name="userId" value={u.id} />
                   <button
                     type="submit"
-                    className="bg-brand-800 text-white text-xs font-bold px-3.5 py-1.5 rounded-full"
+                    className="btn-press bg-brand-800 text-white text-xs font-bold px-3.5 py-1.5 rounded-full"
                   >
                     + Beri Akses
                   </button>

@@ -24,11 +24,11 @@ export default async function AdminMateriPage() {
             name="judul"
             required
             placeholder="Judul BAB baru"
-            className="px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
+            className="input-focus px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
           />
           <button
             type="submit"
-            className="bg-accent-400 text-brand-800 font-extrabold text-sm px-4 py-2.5 rounded-lg whitespace-nowrap"
+            className="btn-press bg-accent-400 text-brand-800 font-extrabold text-sm px-4 py-2.5 rounded-lg whitespace-nowrap"
           >
             + Tambah BAB
           </button>
@@ -48,7 +48,7 @@ export default async function AdminMateriPage() {
               {bab.materi.map((m) => (
                 <div
                   key={m.id}
-                  className="flex items-center gap-2.5 px-2.5 py-2.5 rounded-lg"
+                  className="flex items-center gap-2.5 px-2.5 py-2.5 rounded-lg transition-colors hover:bg-brand-50/60"
                 >
                   <div
                     className={`w-7.5 h-7.5 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold ${

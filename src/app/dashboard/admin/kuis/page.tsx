@@ -24,7 +24,7 @@ export default async function AdminKuisPage() {
           <select
             name="babId"
             required
-            className="flex-1 min-w-[180px] px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
+            className="input-focus flex-1 min-w-[180px] px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
           >
             {babs.map((b) => (
               <option key={b.id} value={b.id}>
@@ -36,11 +36,11 @@ export default async function AdminKuisPage() {
             name="judul"
             required
             placeholder="Judul kuis"
-            className="flex-1 min-w-[180px] px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
+            className="input-focus flex-1 min-w-[180px] px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
           />
           <button
             type="submit"
-            className="bg-accent-400 text-brand-800 font-extrabold text-sm px-5 py-2.5 rounded-lg"
+            className="btn-press bg-accent-400 text-brand-800 font-extrabold text-sm px-5 py-2.5 rounded-lg"
           >
             Buat Kuis
           </button>
@@ -53,7 +53,7 @@ export default async function AdminKuisPage() {
             <Link
               key={k.id}
               href={`/dashboard/admin/kuis/${k.id}`}
-              className="flex justify-between items-center bg-white border border-border-soft rounded-2xl px-5 py-4 hover:shadow-md transition-shadow"
+              className="card-lift flex justify-between items-center bg-white border border-border-soft rounded-2xl px-5 py-4 hover:shadow-md"
             >
               <div>
                 <div className="text-xs font-bold text-brand-600 mb-1">

@@ -27,14 +27,14 @@ export default function ReviewButtons({ projectId }: { projectId: number }) {
       <button
         onClick={() => review("diterima")}
         disabled={isPending}
-        className="text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1.5 rounded-full disabled:opacity-50"
+        className="btn-press text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1.5 rounded-full disabled:opacity-50"
       >
         Terima
       </button>
       <button
         onClick={() => review("revisi")}
         disabled={isPending}
-        className="text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1.5 rounded-full disabled:opacity-50"
+        className="btn-press text-xs font-bold text-amber-700 bg-amber-50 px-3 py-1.5 rounded-full disabled:opacity-50"
       >
         Minta Revisi
       </button>

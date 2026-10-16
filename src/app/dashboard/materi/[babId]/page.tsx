@@ -149,7 +149,7 @@ export default async function BabDetailPage({
         {/* Panel materi saat ini */}
         <div className="flex-1 w-full lg:sticky lg:top-6">
           {current ? (
-            <div className="bg-brand-900 rounded-2xl p-5.5">
+            <div className="reveal bg-brand-900 rounded-2xl p-5.5">
               <div className="text-accent-300 text-xs font-bold mb-2.5">
                 MATERI SAAT INI · {current.judul}
               </div>
@@ -161,7 +161,7 @@ export default async function BabDetailPage({
                   href={current.fileUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center justify-center h-40 rounded-xl bg-white/5 text-white/80 text-sm font-semibold hover:bg-white/10"
+                  className="btn-press flex items-center justify-center h-40 rounded-xl bg-white/5 text-white/80 text-sm font-semibold hover:bg-white/10"
                 >
                   📄 Buka Dokumen
                 </a>
@@ -179,7 +179,7 @@ export default async function BabDetailPage({
               >
                 <button
                   type="submit"
-                  className="inline-block mt-4 bg-accent-400 text-brand-800 font-extrabold text-sm px-5 py-2.75 rounded-xl"
+                  className="btn-press inline-block mt-4 bg-accent-400 text-brand-800 font-extrabold text-sm px-5 py-2.75 rounded-xl"
                 >
                   Tandai Selesai &amp; Lanjut →
                 </button>

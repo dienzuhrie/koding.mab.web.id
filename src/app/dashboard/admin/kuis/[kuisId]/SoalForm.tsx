@@ -26,7 +26,7 @@ export default function SoalForm({ kuisId }: { kuisId: number }) {
         name="pertanyaan"
         required
         placeholder="Tulis pertanyaan di sini"
-        className="w-full px-3.5 py-3 rounded-lg border border-border-soft text-sm font-semibold mb-5"
+        className="input-focus w-full px-3.5 py-3 rounded-lg border border-border-soft text-sm font-semibold mb-5"
       />
 
       <label className="block text-xs font-bold text-muted mb-2.5">
@@ -47,7 +47,7 @@ export default function SoalForm({ kuisId }: { kuisId: number }) {
               name="opsi"
               placeholder={`Opsi ${i + 1}`}
               required={i < 2}
-              className={`flex-1 px-3 py-2.5 rounded-lg border text-sm ${
+              className={`input-focus flex-1 px-3 py-2.5 rounded-lg border text-sm transition-colors ${
                 correct === i
                   ? "border-brand-400 bg-brand-50 font-semibold text-brand-700"
                   : "border-border-soft"
@@ -59,7 +59,7 @@ export default function SoalForm({ kuisId }: { kuisId: number }) {
 
       <button
         type="submit"
-        className="bg-accent-400 text-brand-800 font-extrabold text-sm px-6 py-2.75 rounded-xl"
+        className="btn-press bg-accent-400 text-brand-800 font-extrabold text-sm px-6 py-2.75 rounded-xl"
       >
         Simpan Soal
       </button>

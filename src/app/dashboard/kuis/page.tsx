@@ -29,7 +29,7 @@ export default async function KuisListPage() {
             <Link
               key={k.id}
               href={`/dashboard/kuis/${k.id}`}
-              className="flex items-center justify-between bg-white border border-border-soft rounded-2xl px-5 py-4 hover:shadow-md transition-shadow"
+              className="card-lift group flex items-center justify-between bg-white border border-border-soft rounded-2xl px-5 py-4 hover:shadow-md"
             >
               <div>
                 <div className="text-xs font-bold text-brand-600 mb-1">
@@ -42,7 +42,7 @@ export default async function KuisListPage() {
                   Skor {hasil.skor}
                 </span>
               ) : (
-                <span className="text-sm font-bold text-accent-500">
+                <span className="text-sm font-bold text-accent-500 transition-transform duration-200 group-hover:translate-x-1 inline-block">
                   Mulai →
                 </span>
               )}

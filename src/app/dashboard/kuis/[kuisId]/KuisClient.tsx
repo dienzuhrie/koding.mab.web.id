@@ -57,7 +57,7 @@ export default function KuisClient({
       <div className="max-w-xl mx-auto text-center py-10">
         <div className="text-xs font-bold text-brand-600 mb-2">{babLabel}</div>
         <h1 className="text-xl font-extrabold mb-6">{judul} — Selesai!</h1>
-        <div className="inline-flex items-center justify-center w-32 h-32 rounded-full bg-brand-50 text-brand-700 text-4xl font-extrabold mb-4">
+        <div className="reveal inline-flex items-center justify-center w-32 h-32 rounded-full bg-brand-50 text-brand-700 text-4xl font-extrabold mb-4">
           {result.skor}
         </div>
         <p className="text-sm text-muted mb-7">
@@ -65,7 +65,7 @@ export default function KuisClient({
         </p>
         <Link
           href="/dashboard/kuis"
-          className="inline-block bg-accent-400 text-brand-800 font-extrabold text-sm px-6 py-3 rounded-xl"
+          className="btn-press inline-block bg-accent-400 text-brand-800 font-extrabold text-sm px-6 py-3 rounded-xl"
         >
           Kembali ke Daftar Kuis
         </Link>
@@ -74,7 +74,7 @@ export default function KuisClient({
   }
 
   return (
-    <div className="max-w-xl mx-auto">
+    <div key={index} className="reveal max-w-xl mx-auto">
       <div className="flex justify-between items-center mb-2.5">
         <span className="text-xs font-bold text-muted">{babLabel}</span>
         <span className="text-xs font-bold text-muted">
@@ -83,7 +83,7 @@ export default function KuisClient({
       </div>
       <div className="h-2 bg-[#e3eee6] rounded-full overflow-hidden mb-7">
         <div
-          className="h-full bg-brand-500 transition-all"
+          className="h-full bg-brand-500 transition-all duration-500 ease-out"
           style={{ width: `${((index + 1) / soal.length) * 100}%` }}
         />
       </div>
@@ -97,7 +97,7 @@ export default function KuisClient({
           <button
             key={o.id}
             onClick={() => pick(o.id)}
-            className={`block w-full text-left px-4.5 py-4 rounded-xl text-[15px] font-semibold border-2 transition-colors ${
+            className={`btn-press block w-full text-left px-4.5 py-4 rounded-xl text-[15px] font-semibold border-2 transition-colors ${
               picked === o.id
                 ? "border-brand-500 bg-brand-50 text-brand-700"
                 : "border-border-soft bg-white hover:border-brand-100"
@@ -112,7 +112,7 @@ export default function KuisClient({
         <button
           onClick={handleNext}
           disabled={picked === undefined || submitting}
-          className="bg-accent-400 text-brand-800 font-extrabold text-sm px-7 py-3 rounded-xl disabled:opacity-50"
+          className="btn-press bg-accent-400 text-brand-800 font-extrabold text-sm px-7 py-3 rounded-xl disabled:opacity-50"
         >
           {submitting
             ? "Menilai..."

@@ -31,7 +31,7 @@ export default function MateriForm({ babs }: { babs: Bab[] }) {
           <select
             name="babId"
             required
-            className="w-full px-3 py-2.75 rounded-lg bg-[#0d3328] text-white text-sm border-none"
+            className="input-focus w-full px-3 py-2.75 rounded-lg bg-[#0d3328] text-white text-sm border-none"
           >
             {babs.map((b) => (
               <option key={b.id} value={b.id}>
@@ -49,7 +49,7 @@ export default function MateriForm({ babs }: { babs: Bab[] }) {
             name="judul"
             required
             placeholder="contoh: Box Model & Spacing"
-            className="w-full px-3 py-2.75 rounded-lg bg-[#0d3328] text-white text-sm border-none placeholder:text-brand-100/50"
+            className="input-focus w-full px-3 py-2.75 rounded-lg bg-[#0d3328] text-white text-sm border-none placeholder:text-brand-100/50"
           />
         </div>
 
@@ -61,8 +61,10 @@ export default function MateriForm({ babs }: { babs: Bab[] }) {
             <button
               type="button"
               onClick={() => setTipe("video")}
-              className={`flex-1 text-center py-2.5 rounded-lg text-xs font-bold ${
-                tipe === "video" ? "bg-accent-400 text-brand-800" : "text-brand-100"
+              className={`flex-1 text-center py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                tipe === "video"
+                  ? "bg-accent-400 text-brand-800 scale-[1.03]"
+                  : "text-brand-100 hover:bg-white/5"
               }`}
             >
               ▶ Video YouTube
@@ -70,8 +72,10 @@ export default function MateriForm({ babs }: { babs: Bab[] }) {
             <button
               type="button"
               onClick={() => setTipe("dokumen")}
-              className={`flex-1 text-center py-2.5 rounded-lg text-xs font-bold ${
-                tipe === "dokumen" ? "bg-accent-400 text-brand-800" : "text-brand-100"
+              className={`flex-1 text-center py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${
+                tipe === "dokumen"
+                  ? "bg-accent-400 text-brand-800 scale-[1.03]"
+                  : "text-brand-100 hover:bg-white/5"
               }`}
             >
               📄 Dokumen
@@ -88,7 +92,7 @@ export default function MateriForm({ babs }: { babs: Bab[] }) {
             <input
               name="urlYoutube"
               placeholder="https://youtube.com/watch?v=..."
-              className="w-full px-3 py-2.75 rounded-lg bg-[#0d3328] text-white text-sm border-none placeholder:text-brand-100/50"
+              className="input-focus w-full px-3 py-2.75 rounded-lg bg-[#0d3328] text-white text-sm border-none placeholder:text-brand-100/50"
             />
           </div>
         ) : (
@@ -107,7 +111,7 @@ export default function MateriForm({ babs }: { babs: Bab[] }) {
 
         <button
           type="submit"
-          className="w-full bg-accent-400 text-brand-800 font-extrabold text-sm py-3 rounded-xl mt-1"
+          className="btn-press w-full bg-accent-400 text-brand-800 font-extrabold text-sm py-3 rounded-xl mt-1"
         >
           Simpan Materi
         </button>

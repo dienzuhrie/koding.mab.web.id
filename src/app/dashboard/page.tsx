@@ -34,7 +34,7 @@ function AuroraBanner({
   initials: string;
 }) {
   return (
-    <div className="relative overflow-hidden bg-brand-900 rounded-3xl px-7 py-8 mb-8">
+    <div className="reveal relative overflow-hidden bg-brand-900 rounded-3xl px-7 py-8 mb-8">
       <div className="pointer-events-none absolute -top-16 -left-10 w-72 h-72 rounded-full bg-white opacity-20 blur-3xl animate-aurora-1" />
       <div className="pointer-events-none absolute -bottom-20 -right-6 w-80 h-80 rounded-full bg-white opacity-10 blur-3xl animate-aurora-2" />
       <div className="relative flex justify-between items-center flex-wrap gap-4">
@@ -45,7 +45,7 @@ function AuroraBanner({
           <h1 className="text-2xl font-extrabold text-white mb-1">{title}</h1>
           <p className="text-sm text-brand-100">{subtitle}</p>
         </div>
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-brand-400 to-brand-700 flex items-center justify-center text-white font-extrabold text-sm shadow-lg shrink-0">
+        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-brand-400 to-brand-700 flex items-center justify-center text-white font-extrabold text-sm shadow-lg shrink-0 transition-transform duration-300 hover:scale-110 hover:rotate-3">
           {initials}
         </div>
       </div>
@@ -127,18 +127,21 @@ async function SiswaDashboard({
           tint="brand"
           label="MATERI SELESAI"
           value={`${selesaiCount} / ${totalMateri}`}
+          className="reveal reveal-1"
         />
         <StatCard
           icon={TrendUpIcon}
           tint="accent"
           label="RATA-RATA KUIS"
           value={rataKuis !== null ? `${rataKuis}/100` : "—"}
+          className="reveal reveal-2"
         />
         <StatCard
           icon={BriefcaseIcon}
           tint="brand"
           label="PROJECT DIUPLOAD"
           value={String(projectCount)}
+          className="reveal reveal-3"
         />
       </div>
 
@@ -156,7 +159,7 @@ async function SiswaDashboard({
           </div>
           <Link
             href={`/dashboard/materi/${nextProgress.materi.babId}`}
-            className="relative bg-accent-400 text-brand-800 font-extrabold text-sm px-5.5 py-3 rounded-xl whitespace-nowrap hover:bg-accent-300 transition-colors"
+            className="btn-press relative bg-accent-400 text-brand-800 font-extrabold text-sm px-5.5 py-3 rounded-xl whitespace-nowrap hover:bg-accent-300 transition-colors"
           >
             Lanjut Belajar →
           </Link>
@@ -171,7 +174,7 @@ async function SiswaDashboard({
         {activity.map((a, i) => (
           <div
             key={i}
-            className="flex items-center gap-3 bg-white border border-border-soft rounded-xl px-4 py-3.5 hover:shadow-sm transition-shadow"
+            className="card-lift flex items-center gap-3 bg-white border border-border-soft rounded-xl px-4 py-3.5 hover:shadow-sm"
           >
             <div
               className={`w-8.5 h-8.5 rounded-lg flex items-center justify-center ${
@@ -238,15 +241,16 @@ async function GuruDashboard({ userName }: { userName: string }) {
       />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4.5 mb-8">
-        <StatCard icon={LayersIcon} tint="brand" label="TOTAL BAB" value={String(babCount)} />
-        <StatCard icon={BookIcon} tint="brand" label="TOTAL MATERI" value={String(materiCount)} />
+        <StatCard icon={LayersIcon} tint="brand" label="TOTAL BAB" value={String(babCount)} className="reveal reveal-1" />
+        <StatCard icon={BookIcon} tint="brand" label="TOTAL MATERI" value={String(materiCount)} className="reveal reveal-2" />
         <StatCard
           icon={BriefcaseIcon}
           tint="accent"
           label="PROJECT MENUNGGU REVIEW"
           value={String(pendingProject)}
+          className="reveal reveal-3"
         />
-        <StatCard icon={UsersIcon} tint="brand" label="SISWA AKTIF" value={String(aksesSiswa)} />
+        <StatCard icon={UsersIcon} tint="brand" label="SISWA AKTIF" value={String(aksesSiswa)} className="reveal reveal-4" />
       </div>
 
       <h2 className="text-[17px] font-extrabold mb-3.5">Aksi Cepat</h2>
@@ -255,16 +259,16 @@ async function GuruDashboard({ userName }: { userName: string }) {
           <Link
             key={a.href}
             href={a.href}
-            className="group flex items-center gap-4 bg-white border border-border-soft rounded-2xl p-5 hover:border-brand-400 hover:shadow-md transition-all"
+            className="card-lift group flex items-center gap-4 bg-white border border-border-soft rounded-2xl p-5 hover:border-brand-400 hover:shadow-md"
           >
-            <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center shrink-0 group-hover:bg-brand-700 group-hover:text-white transition-colors">
+            <div className="w-11 h-11 rounded-xl bg-brand-50 text-brand-700 flex items-center justify-center shrink-0 transition-all duration-200 group-hover:bg-brand-700 group-hover:text-white group-hover:scale-110 group-hover:rotate-3">
               <a.icon size={20} />
             </div>
             <div className="flex-1">
               <div className="font-extrabold text-sm">{a.title}</div>
               <div className="text-xs text-muted">{a.desc}</div>
             </div>
-            <span className="text-muted group-hover:text-brand-700 group-hover:translate-x-0.5 transition-all">
+            <span className="text-muted group-hover:text-brand-700 group-hover:translate-x-1 transition-all">
               →
             </span>
           </Link>
@@ -279,16 +283,20 @@ function StatCard({
   tint,
   label,
   value,
+  className = "",
 }: {
   icon: (props: { className?: string; size?: number }) => React.ReactElement;
   tint: "brand" | "accent";
   label: string;
   value: string;
+  className?: string;
 }) {
   return (
-    <div className="bg-white rounded-2xl p-5 border border-border-soft hover:shadow-sm transition-shadow">
+    <div
+      className={`card-lift group bg-white rounded-2xl p-5 border border-border-soft hover:shadow-md ${className}`}
+    >
       <div
-        className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3.5 ${
+        className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3.5 transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-6 ${
           tint === "brand" ? "bg-brand-50 text-brand-700" : "bg-accent-400/15 text-accent-500"
         }`}
       >

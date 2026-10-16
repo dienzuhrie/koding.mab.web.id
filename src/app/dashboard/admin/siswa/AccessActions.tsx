@@ -16,7 +16,7 @@ export default function AccessActions({
     <button
       onClick={() => startTransition(() => toggleStatus(accessId))}
       disabled={isPending}
-      className={`text-xs font-bold px-3 py-1.5 rounded-full disabled:opacity-50 ${
+      className={`btn-press text-xs font-bold px-3 py-1.5 rounded-full disabled:opacity-50 ${
         status === "active"
           ? "bg-red-50 text-red-600"
           : "bg-brand-50 text-brand-700"

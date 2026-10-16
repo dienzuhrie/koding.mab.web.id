@@ -37,31 +37,31 @@ async function SiswaProjectPage({ userId }: { userId: number }) {
         action={uploadProject}
         className="border-2 border-dashed border-[#b7d9c0] rounded-2xl p-7 bg-[#eef6f0] mb-9 flex flex-col gap-3.5 max-w-xl"
       >
-        <div className="flex justify-center text-brand-600">
+        <div className="flex justify-center text-brand-600 transition-transform duration-300 hover:scale-110 hover:-translate-y-0.5">
           <UploadIcon size={30} />
         </div>
         <input
           name="judul"
           required
           placeholder="Judul project"
-          className="w-full px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
+          className="input-focus w-full px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
         />
         <textarea
           name="deskripsi"
           placeholder="Deskripsi singkat (opsional)"
           rows={2}
-          className="w-full px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
+          className="input-focus w-full px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
         />
         <div className="flex gap-3 flex-wrap">
           <input
             name="linkDemo"
             placeholder="Link demo (opsional)"
-            className="flex-1 min-w-[180px] px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
+            className="input-focus flex-1 min-w-[180px] px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
           />
           <input
             name="linkGithub"
             placeholder="Link GitHub (opsional)"
-            className="flex-1 min-w-[180px] px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
+            className="input-focus flex-1 min-w-[180px] px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
           />
         </div>
         <input
@@ -72,7 +72,7 @@ async function SiswaProjectPage({ userId }: { userId: number }) {
         />
         <button
           type="submit"
-          className="self-start bg-accent-400 text-brand-800 font-extrabold text-sm px-5 py-2.5 rounded-xl"
+          className="btn-press self-start bg-accent-400 text-brand-800 font-extrabold text-sm px-5 py-2.5 rounded-xl"
         >
           Upload Project
         </button>
@@ -83,7 +83,7 @@ async function SiswaProjectPage({ userId }: { userId: number }) {
         {projects.map((p) => (
           <div
             key={p.id}
-            className="bg-white border border-border-soft rounded-2xl p-4.5"
+            className="card-lift bg-white border border-border-soft rounded-2xl p-4.5 hover:shadow-md"
           >
             <div className="flex justify-between items-start gap-2 mb-1.5">
               <div className="font-extrabold text-sm">{p.judul}</div>
@@ -124,7 +124,7 @@ async function GuruProjectReview() {
         {projects.map((p) => (
           <div
             key={p.id}
-            className="flex justify-between items-center gap-3 bg-white border border-border-soft rounded-2xl px-5 py-4"
+            className="card-lift flex justify-between items-center gap-3 bg-white border border-border-soft rounded-2xl px-5 py-4 hover:shadow-md"
           >
             <div>
               <div className="font-extrabold text-sm">{p.judul}</div>

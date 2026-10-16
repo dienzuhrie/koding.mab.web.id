@@ -101,7 +101,7 @@ export default function Sidebar({ role }: { role: "siswa" | "guru" }) {
           <button
             onClick={toggle}
             title="Ciutkan menu"
-            className="text-brand-100 hover:text-white hover:bg-white/5 rounded-lg p-1.5 transition-colors"
+            className="btn-press text-brand-100 hover:text-white hover:bg-white/5 rounded-lg p-1.5 transition-colors"
           >
             <PanelToggleIcon size={16} />
           </button>
@@ -112,7 +112,7 @@ export default function Sidebar({ role }: { role: "siswa" | "guru" }) {
         <button
           onClick={toggle}
           title="Perluas menu"
-          className="mx-auto mb-3 text-brand-100 hover:text-white hover:bg-white/5 rounded-lg p-1.5 transition-colors"
+          className="btn-press mx-auto mb-3 text-brand-100 hover:text-white hover:bg-white/5 rounded-lg p-1.5 transition-colors"
         >
           <PanelToggleIcon size={16} />
         </button>
@@ -135,7 +135,7 @@ export default function Sidebar({ role }: { role: "siswa" | "guru" }) {
               key={item.href}
               href={item.href}
               title={collapsed ? item.label : undefined}
-              className={`flex items-center gap-2.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+              className={`group flex items-center gap-2.5 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
                 collapsed ? "justify-center px-0" : "px-3.5"
               } ${
                 active
@@ -143,7 +143,7 @@ export default function Sidebar({ role }: { role: "siswa" | "guru" }) {
                   : "text-brand-100 hover:bg-white/5"
               }`}
             >
-              <Icon className="shrink-0" />
+              <Icon className="shrink-0 transition-transform duration-200 group-hover:scale-110" />
               {!collapsed && item.label}
             </Link>
           );
