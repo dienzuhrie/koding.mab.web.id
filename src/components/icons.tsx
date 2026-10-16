@@ -95,6 +95,14 @@ export function UploadIcon({ className, size = 24 }: IconProps) {
   );
 }
 
+export function ChevronDownIcon({ className, size = 18 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  );
+}
+
 export function UsersIcon({ className, size = 18 }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">
