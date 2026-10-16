@@ -204,3 +204,42 @@ model KodingProject {
 
   @@map("koding_project")
 }
+
+// ---------------------------------------------------------------------------
+// Pathway: bahan ajar per pertemuan (LKS, PPT, materi) yang jadi acuan utama
+// proses belajar siswa. Beda dari koding_materi/koding_bab (roadmap video per
+// topik) yang sekarang statusnya hanya referensi tambahan.
+// ---------------------------------------------------------------------------
+
+model KodingPertemuan {
+  id        Int      @id @default(autoincrement())
+  judul     String
+  deskripsi String?  @db.Text
+  urutan    Int
+  createdAt DateTime @default(now()) @map("created_at")
+
+  bahan KodingBahanAjar[]
+
+  @@map("koding_pertemuan")
+}
+
+enum KodingBahanTipe {
+  lks
+  ppt
+  materi
+  lainnya
+}
+
+model KodingBahanAjar {
+  id          Int             @id @default(autoincrement())
+  pertemuanId Int             @map("pertemuan_id")
+  judul       String
+  tipe        KodingBahanTipe
+  fileUrl     String          @map("file_url")
+  urutan      Int
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  pertemuan KodingPertemuan @relation(fields: [pertemuanId], references: [id])
+
+  @@map("koding_bahan_ajar")
+}

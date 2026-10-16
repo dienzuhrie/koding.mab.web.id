@@ -112,6 +112,35 @@ export function PanelToggleIcon({ className, size = 18 }: IconProps) {
   );
 }
 
+export function RouteIcon({ className, size = 18 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">
+      <circle cx="6" cy="19" r="2.5" />
+      <circle cx="18" cy="5" r="2.5" />
+      <path d="M8.3 17.5 15.7 6.5" strokeDasharray="2 3" />
+    </svg>
+  );
+}
+
+export function FileTextIcon({ className, size = 18 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <path d="M14 2v6h6" />
+      <path d="M9 13h6" />
+      <path d="M9 17h6" />
+    </svg>
+  );
+}
+
+export function ChevronRightIcon({ className, size = 16 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">
+      <path d="m9 6 6 6-6 6" />
+    </svg>
+  );
+}
+
 export function UsersIcon({ className, size = 18 }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">

@@ -10,6 +10,7 @@ import {
   BriefcaseIcon,
   UsersIcon,
   TrendUpIcon,
+  RouteIcon,
 } from "@/components/icons";
 
 export default async function DashboardPage() {
@@ -121,6 +122,24 @@ async function SiswaDashboard({
         initials={userName.slice(0, 2).toUpperCase()}
       />
 
+      <Link
+        href="/dashboard/pathway"
+        className="btn-press group flex items-center gap-4 bg-white border-2 border-accent-400 rounded-2xl p-5 mb-8"
+      >
+        <div className="w-11 h-11 rounded-xl bg-accent-400/15 text-accent-500 flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-110">
+          <RouteIcon size={20} />
+        </div>
+        <div className="flex-1">
+          <div className="font-extrabold text-sm">Pathway Pembelajaran</div>
+          <div className="text-xs text-muted">
+            Acuan utama belajar kamu — LKS, PPT, dan materi per pertemuan
+          </div>
+        </div>
+        <span className="text-accent-500 font-bold text-sm group-hover:translate-x-1 transition-transform">
+          Buka →
+        </span>
+      </Link>
+
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4.5 mb-8">
         <StatCard
           icon={BookIcon}
@@ -206,10 +225,16 @@ async function GuruDashboard({ userName }: { userName: string }) {
 
   const quickActions = [
     {
+      href: "/dashboard/admin/pathway",
+      icon: RouteIcon,
+      title: "Kelola Pathway",
+      desc: "Upload LKS, PPT, dan materi per pertemuan",
+    },
+    {
       href: "/dashboard/admin/materi",
       icon: LayersIcon,
       title: "Kelola Materi",
-      desc: "Atur BAB, video YouTube, dan dokumen",
+      desc: "Atur BAB, video YouTube, dan dokumen (referensi)",
     },
     {
       href: "/dashboard/admin/kuis",

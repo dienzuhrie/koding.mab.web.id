@@ -52,9 +52,21 @@ client di database `jtwodvjz_simadu`:
 2. `prisma/manual-migrations/003_simplify_koding_user_access.sql` —
    menyederhanakan `koding_user_access` jadi murni daftar siswa terpilih
    (file `002` sudah superseded, lihat isinya).
+3. `prisma/manual-migrations/004_pathway_tables.sql` — tabel untuk fitur
+   Pathway (bahan ajar per pertemuan).
 
 Memilih siswa dilakukan lewat UI (Kelola Siswa), tidak perlu insert SQL
 manual lagi untuk operasional sehari-hari.
+
+## Pathway vs Materi Belajar
+
+- **Pathway** (`/dashboard/pathway`, dikelola di `/dashboard/admin/pathway`)
+  adalah acuan utama belajar siswa: LKS, PPT, dan materi diupload guru per
+  pertemuan, lalu diunduh langsung oleh siswa — tidak ada sistem kunci
+  berurutan di sini, murni daftar per pertemuan.
+- **Materi Belajar** (roadmap video `koding_bab`/`koding_materi`) sekarang
+  berstatus referensi tambahan saja, tetap jalan dengan sistem BAB
+  berurutan + progress tracking seperti sebelumnya.
 
 ## Upload file (materi dokumen & project siswa)
 

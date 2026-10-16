@@ -21,8 +21,9 @@ export default async function MateriListPage() {
   return (
     <div>
       <h1 className="text-2xl font-extrabold mb-1">Materi Belajar</h1>
-      <p className="text-sm text-muted mb-7">
-        Selesaikan tiap BAB secara berurutan untuk membuka BAB selanjutnya.
+      <p className="text-sm text-muted mb-7 max-w-lg">
+        Video referensi tambahan, bukan acuan utama — untuk bahan ajar
+        pertemuan (LKS, PPT, materi) buka menu <strong>Pathway</strong>.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

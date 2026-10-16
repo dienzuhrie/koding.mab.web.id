@@ -167,7 +167,7 @@ export default async function HomePage() {
       </section>
 
       <footer className="px-8 py-7 bg-brand-900 text-brand-100 text-sm text-center rounded-t-3xl">
-        © {new Date().getFullYear()} Full Stack Developer MAB · koding.mab.web.id
+        MA Bilingual Muslimat NU Sidoarjo. Developed by sukafisika.
       </footer>
     </div>
   );

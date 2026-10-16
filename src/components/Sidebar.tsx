@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { signOut } from "next-auth/react";
 import {
   HomeIcon,
   BookIcon,
@@ -12,8 +11,8 @@ import {
   LayersIcon,
   ClipboardCheckIcon,
   UsersIcon,
+  RouteIcon,
   PanelToggleIcon,
-  LogoutIcon,
 } from "@/components/icons";
 
 type NavItem = {
@@ -24,6 +23,7 @@ type NavItem = {
 
 const siswaNav: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: HomeIcon },
+  { href: "/dashboard/pathway", label: "Pathway", icon: RouteIcon },
   { href: "/dashboard/materi", label: "Materi Belajar", icon: BookIcon },
   { href: "/dashboard/kuis", label: "Kuis", icon: HelpIcon },
   { href: "/dashboard/project", label: "Project", icon: BriefcaseIcon },
@@ -31,6 +31,7 @@ const siswaNav: NavItem[] = [
 
 const guruNav: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: HomeIcon },
+  { href: "/dashboard/admin/pathway", label: "Kelola Pathway", icon: RouteIcon },
   { href: "/dashboard/admin/materi", label: "Kelola Materi", icon: LayersIcon },
   { href: "/dashboard/admin/kuis", label: "Kelola Kuis", icon: ClipboardCheckIcon },
   { href: "/dashboard/admin/siswa", label: "Kelola Siswa", icon: UsersIcon },
@@ -78,7 +79,7 @@ export default function Sidebar({ role }: { role: "siswa" | "guru" }) {
 
   return (
     <aside
-      className={`shrink-0 bg-brand-900 py-6 flex flex-col min-h-full transition-[width] duration-300 ease-in-out ${
+      className={`sticky top-0 h-screen overflow-y-auto shrink-0 bg-brand-900 py-6 flex flex-col transition-[width] duration-300 ease-in-out ${
         collapsed ? "w-[76px] px-3" : "w-60 px-4"
       }`}
     >
@@ -149,17 +150,6 @@ export default function Sidebar({ role }: { role: "siswa" | "guru" }) {
           );
         })}
       </nav>
-
-      <button
-        onClick={() => signOut({ callbackUrl: "/" })}
-        title={collapsed ? "Keluar" : undefined}
-        className={`flex items-center gap-2.5 py-2.5 rounded-xl text-sm font-semibold text-brand-100 hover:bg-white/5 transition-colors mt-4 ${
-          collapsed ? "justify-center px-0" : "px-3.5"
-        }`}
-      >
-        <LogoutIcon className="shrink-0" />
-        {!collapsed && "Keluar"}
-      </button>
     </aside>
   );
 }
