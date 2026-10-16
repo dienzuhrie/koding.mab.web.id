@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useTransition } from "react";
 import { addBahan } from "./actions";
+import type { Bahan } from "./BahanRow";
 
 type Pertemuan = { id: number; judul: string; urutan: number };
 
@@ -12,8 +13,32 @@ const tipeOptions = [
   { value: "lainnya", label: "Lainnya" },
 ];
 
-export default function BahanForm({ pertemuan }: { pertemuan: Pertemuan[] }) {
+export default function BahanForm({
+  pertemuan,
+  onAdded,
+}: {
+  pertemuan: Pertemuan[];
+  onAdded: (pertemuanId: number, bahan: Bahan) => void;
+}) {
   const formRef = useRef<HTMLFormElement>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    const formData = new FormData(e.currentTarget);
+    const pertemuanId = Number(formData.get("pertemuanId"));
+    startTransition(async () => {
+      try {
+        const bahan = await addBahan(formData);
+        onAdded(pertemuanId, bahan);
+        formRef.current?.reset();
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Gagal menyimpan.");
+      }
+    });
+  }
 
   return (
     <div className="bg-brand-900 rounded-2xl p-6 h-fit">
@@ -23,10 +48,7 @@ export default function BahanForm({ pertemuan }: { pertemuan: Pertemuan[] }) {
 
       <form
         ref={formRef}
-        action={async (formData) => {
-          await addBahan(formData);
-          formRef.current?.reset();
-        }}
+        onSubmit={handleSubmit}
         className="flex flex-col gap-4"
       >
         <div>
@@ -88,11 +110,14 @@ export default function BahanForm({ pertemuan }: { pertemuan: Pertemuan[] }) {
           />
         </div>
 
+        {error && <p className="text-xs font-semibold text-red-300">{error}</p>}
+
         <button
           type="submit"
-          className="btn-press w-full bg-accent-400 text-brand-800 font-extrabold text-sm py-3 rounded-xl mt-1"
+          disabled={isPending}
+          className="btn-press w-full bg-accent-400 text-brand-800 font-extrabold text-sm py-3 rounded-xl mt-1 disabled:opacity-60"
         >
-          Simpan Bahan Ajar
+          {isPending ? "Menyimpan..." : "Simpan Bahan Ajar"}
         </button>
       </form>
     </div>

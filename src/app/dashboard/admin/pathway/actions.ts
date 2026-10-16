@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { saveUpload } from "@/lib/upload";
 
@@ -14,9 +13,29 @@ export async function createPertemuan(formData: FormData) {
   });
   const urutan = (last?.urutan ?? 0) + 1;
 
-  await prisma.kodingPertemuan.create({ data: { judul, deskripsi, urutan } });
-  revalidatePath("/dashboard/admin/pathway");
-  revalidatePath("/dashboard/pathway");
+  return prisma.kodingPertemuan.create({ data: { judul, deskripsi, urutan } });
+}
+
+export async function updatePertemuan(formData: FormData) {
+  const id = Number(formData.get("id"));
+  const judul = String(formData.get("judul") ?? "").trim();
+  const deskripsi = String(formData.get("deskripsi") ?? "").trim() || null;
+  if (!id || !judul) throw new Error("Judul pertemuan wajib diisi.");
+
+  return prisma.kodingPertemuan.update({
+    where: { id },
+    data: { judul, deskripsi },
+  });
+}
+
+export async function deletePertemuan(id: number) {
+  try {
+    await prisma.kodingPertemuan.delete({ where: { id } });
+  } catch {
+    throw new Error(
+      "Pertemuan tidak bisa dihapus — hapus dulu semua bahan ajar di dalamnya."
+    );
+  }
 }
 
 export async function addBahan(formData: FormData) {
@@ -44,10 +63,38 @@ export async function addBahan(formData: FormData) {
   });
   const urutan = (last?.urutan ?? 0) + 1;
 
-  await prisma.kodingBahanAjar.create({
+  return prisma.kodingBahanAjar.create({
     data: { pertemuanId, judul, tipe, fileUrl, urutan },
   });
+}
 
-  revalidatePath("/dashboard/admin/pathway");
-  revalidatePath("/dashboard/pathway");
+export async function updateBahan(formData: FormData) {
+  const id = Number(formData.get("id"));
+  const judul = String(formData.get("judul") ?? "").trim();
+  const tipe = String(formData.get("tipe")) as
+    | "lks"
+    | "ppt"
+    | "materi"
+    | "lainnya";
+  const file = formData.get("file") as File | null;
+
+  if (!id || !judul) throw new Error("Judul bahan ajar wajib diisi.");
+
+  let newFileUrl: string | null = null;
+  if (file && file.size > 0) {
+    newFileUrl = await saveUpload(file, "pathway");
+  }
+
+  return prisma.kodingBahanAjar.update({
+    where: { id },
+    data: {
+      judul,
+      tipe,
+      ...(newFileUrl ? { fileUrl: newFileUrl } : {}),
+    },
+  });
+}
+
+export async function deleteBahan(id: number) {
+  await prisma.kodingBahanAjar.delete({ where: { id } });
 }

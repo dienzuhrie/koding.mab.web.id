@@ -16,6 +16,24 @@ export async function createBab(formData: FormData) {
   revalidatePath("/dashboard/admin/materi");
 }
 
+export async function updateBab(formData: FormData) {
+  const id = Number(formData.get("id"));
+  const judul = String(formData.get("judul") ?? "").trim();
+  if (!id || !judul) throw new Error("Judul BAB wajib diisi.");
+
+  return prisma.kodingBab.update({ where: { id }, data: { judul } });
+}
+
+export async function deleteBab(id: number) {
+  try {
+    await prisma.kodingBab.delete({ where: { id } });
+  } catch {
+    throw new Error(
+      "BAB tidak bisa dihapus — hapus dulu semua materi & kuis di dalamnya."
+    );
+  }
+}
+
 export async function createMateri(formData: FormData) {
   const babId = Number(formData.get("babId"));
   const judul = String(formData.get("judul") ?? "").trim();
@@ -51,4 +69,43 @@ export async function createMateri(formData: FormData) {
   // (lihat BabCard), biar simpan materi terasa instan tanpa animasi
   // transisi halaman yang ikut terpicu oleh refresh RSC.
   return materi;
+}
+
+export async function updateMateri(formData: FormData) {
+  const id = Number(formData.get("id"));
+  const judul = String(formData.get("judul") ?? "").trim();
+  const tipe = String(formData.get("tipe")) as "video" | "dokumen";
+  const urlYoutube = String(formData.get("urlYoutube") ?? "").trim() || null;
+  const file = formData.get("file") as File | null;
+
+  if (!id || !judul) throw new Error("Judul materi wajib diisi.");
+
+  let newFileUrl: string | null = null;
+  if (tipe === "dokumen" && file && file.size > 0) {
+    newFileUrl = await saveUpload(file, "materi");
+  }
+
+  return prisma.kodingMateri.update({
+    where: { id },
+    data: {
+      judul,
+      tipe,
+      urlYoutube: tipe === "video" ? urlYoutube : null,
+      ...(tipe === "video"
+        ? { fileUrl: null }
+        : newFileUrl
+        ? { fileUrl: newFileUrl }
+        : {}),
+    },
+  });
+}
+
+export async function deleteMateri(id: number) {
+  try {
+    await prisma.kodingMateri.delete({ where: { id } });
+  } catch {
+    throw new Error(
+      "Materi tidak bisa dihapus — kemungkinan masih ada progress siswa yang terkait."
+    );
+  }
 }

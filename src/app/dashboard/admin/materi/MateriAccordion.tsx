@@ -2,18 +2,13 @@
 
 import { useState } from "react";
 import BabCard from "./BabCard";
+import type { Materi } from "./MateriRow";
 
-type Materi = {
-  id: number;
-  judul: string;
-  tipe: "video" | "dokumen";
-  urlYoutube: string | null;
-  fileUrl: string | null;
-};
 type Bab = { id: number; urutan: number; judul: string; materi: Materi[] };
 
-export default function MateriAccordion({ babs }: { babs: Bab[] }) {
-  const [openId, setOpenId] = useState<number | null>(babs[0]?.id ?? null);
+export default function MateriAccordion({ babs: initialBabs }: { babs: Bab[] }) {
+  const [babs, setBabs] = useState(initialBabs);
+  const [openId, setOpenId] = useState<number | null>(initialBabs[0]?.id ?? null);
 
   return (
     <div className="flex flex-col gap-3.5 max-w-3xl">
@@ -26,6 +21,15 @@ export default function MateriAccordion({ babs }: { babs: Bab[] }) {
           initialMateri={bab.materi}
           isOpen={openId === bab.id}
           onToggle={() => setOpenId((cur) => (cur === bab.id ? null : bab.id))}
+          onBabUpdated={(updated) =>
+            setBabs((prev) =>
+              prev.map((b) => (b.id === updated.id ? { ...b, judul: updated.judul } : b))
+            )
+          }
+          onBabDeleted={(id) => {
+            setBabs((prev) => prev.filter((b) => b.id !== id));
+            setOpenId((cur) => (cur === id ? null : cur));
+          }}
         />
       ))}
       {babs.length === 0 && (

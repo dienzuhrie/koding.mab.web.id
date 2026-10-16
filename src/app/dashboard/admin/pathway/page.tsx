@@ -1,84 +1,29 @@
 import { prisma } from "@/lib/prisma";
-import { createPertemuan } from "./actions";
-import BahanForm from "./BahanForm";
-import PertemuanCard from "./PertemuanCard";
-import BahanItem from "./BahanItem";
+import PathwayAccordion from "./PathwayAccordion";
 
 export default async function AdminPathwayPage() {
   const pertemuan = await prisma.kodingPertemuan.findMany({
     orderBy: { urutan: "asc" },
-    include: { bahan: { orderBy: { urutan: "asc" } } },
+    include: {
+      bahan: {
+        orderBy: { urutan: "asc" },
+        select: { id: true, judul: true, tipe: true, fileUrl: true },
+      },
+    },
   });
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-7 flex-wrap gap-3">
-        <div>
-          <h1 className="text-2xl font-extrabold mb-1">Kelola Pathway</h1>
-          <p className="text-sm text-muted max-w-lg">
-            Upload LKS, PPT, dan materi per pertemuan — ini yang jadi acuan
-            utama siswa belajar. Materi Belajar (video) tetap ada sebagai
-            referensi tambahan saja.
-          </p>
-        </div>
-        <form action={createPertemuan} className="flex gap-2">
-          <input
-            name="judul"
-            required
-            placeholder="Judul pertemuan baru"
-            className="input-focus px-3.5 py-2.5 rounded-lg border border-border-soft text-sm"
-          />
-          <button
-            type="submit"
-            className="btn-press bg-accent-400 text-brand-800 font-extrabold text-sm px-4 py-2.5 rounded-lg whitespace-nowrap"
-          >
-            + Tambah Pertemuan
-          </button>
-        </form>
+      <div className="mb-7">
+        <h1 className="text-2xl font-extrabold mb-1">Kelola Pathway</h1>
+        <p className="text-sm text-muted max-w-lg">
+          Upload LKS, PPT, dan materi per pertemuan — ini yang jadi acuan
+          utama siswa belajar. Materi Belajar (video) tetap ada sebagai
+          referensi tambahan saja.
+        </p>
       </div>
 
-      <div className="flex flex-wrap gap-6">
-        <div className="flex-1 min-w-[320px] flex flex-col gap-3.5">
-          {pertemuan.map((p, i) => (
-            <PertemuanCard
-              key={p.id}
-              urutan={p.urutan}
-              judul={p.judul}
-              jumlahBahan={p.bahan.length}
-              defaultOpen={i === 0}
-            >
-              {p.bahan.map((b) => (
-                <BahanItem
-                  key={b.id}
-                  judul={b.judul}
-                  tipe={b.tipe}
-                  fileUrl={b.fileUrl}
-                />
-              ))}
-              {p.bahan.length === 0 && (
-                <div className="px-2.5 py-2 text-xs text-muted">
-                  Belum ada bahan ajar ditambahkan
-                </div>
-              )}
-            </PertemuanCard>
-          ))}
-          {pertemuan.length === 0 && (
-            <p className="text-sm text-muted">
-              Belum ada pertemuan. Tambahkan pertemuan pertama di atas.
-            </p>
-          )}
-        </div>
-
-        <div className="flex-1 min-w-[300px]">
-          {pertemuan.length > 0 ? (
-            <BahanForm pertemuan={pertemuan} />
-          ) : (
-            <p className="text-sm text-muted">
-              Tambahkan minimal satu pertemuan sebelum menambahkan bahan ajar.
-            </p>
-          )}
-        </div>
-      </div>
+      <PathwayAccordion pertemuan={pertemuan} />
     </div>
   );
 }

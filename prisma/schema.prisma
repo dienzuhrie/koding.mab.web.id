@@ -26,6 +26,7 @@ model User {
   progress     KodingProgressMateri[]
   hasilKuis    KodingHasilKuis[]
   projects     KodingProject[]
+  pathwayViews KodingPathwayView[]
 
   @@map("user")
 }
@@ -240,6 +241,20 @@ model KodingBahanAjar {
   createdAt   DateTime        @default(now()) @map("created_at")
 
   pertemuan KodingPertemuan @relation(fields: [pertemuanId], references: [id])
+  views     KodingPathwayView[]
 
   @@map("koding_bahan_ajar")
+}
+
+model KodingPathwayView {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  bahanId   Int      @map("bahan_id")
+  viewedAt  DateTime @default(now()) @map("viewed_at")
+
+  user  User            @relation(fields: [userId], references: [id])
+  bahan KodingBahanAjar @relation(fields: [bahanId], references: [id])
+
+  @@unique([userId, bahanId])
+  @@map("koding_pathway_view")
 }

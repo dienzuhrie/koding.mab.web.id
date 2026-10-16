@@ -54,6 +54,9 @@ client di database `jtwodvjz_simadu`:
    (file `002` sudah superseded, lihat isinya).
 3. `prisma/manual-migrations/004_pathway_tables.sql` — tabel untuk fitur
    Pathway (bahan ajar per pertemuan).
+4. `prisma/manual-migrations/005_pathway_view_tracking.sql` — tabel untuk
+   melacak bahan ajar yang sudah dibuka siswa (dipakai halaman Progress
+   Siswa).
 
 Memilih siswa dilakukan lewat UI (Kelola Siswa), tidak perlu insert SQL
 manual lagi untuk operasional sehari-hari.

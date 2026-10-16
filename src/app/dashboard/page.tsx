@@ -249,6 +249,12 @@ async function GuruDashboard({ userName }: { userName: string }) {
       desc: "Beri akses login ke akun SIMADU",
     },
     {
+      href: "/dashboard/admin/progress-siswa",
+      icon: TrendUpIcon,
+      title: "Progress Siswa",
+      desc: "Pantau materi & pathway yang sudah dibuka siswa",
+    },
+    {
       href: "/dashboard/project",
       icon: BriefcaseIcon,
       title: "Review Project",

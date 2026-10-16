@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FileTextIcon } from "@/components/icons";
 import PreviewModal from "@/components/PreviewModal";
+import { markBahanViewed } from "./actions";
 
 const tipeLabel: Record<string, string> = {
   lks: "LKS",
@@ -18,21 +19,28 @@ const tipeClass: Record<string, string> = {
 };
 
 export default function BahanCard({
+  bahanId,
   judul,
   tipe,
   fileUrl,
 }: {
+  bahanId: number;
   judul: string;
   tipe: string;
   fileUrl: string;
 }) {
   const [open, setOpen] = useState(false);
 
+  function handleOpen() {
+    setOpen(true);
+    markBahanViewed(bahanId).catch(() => {});
+  }
+
   return (
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={handleOpen}
         className="card-lift flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-brand-50/60 text-left w-full"
       >
         <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 bg-blue-50 text-blue-600">

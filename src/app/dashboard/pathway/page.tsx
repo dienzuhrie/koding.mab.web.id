@@ -35,6 +35,7 @@ export default async function PathwayPage() {
               {p.bahan.map((b) => (
                 <BahanCard
                   key={b.id}
+                  bahanId={b.id}
                   judul={b.judul}
                   tipe={b.tipe}
                   fileUrl={b.fileUrl}
