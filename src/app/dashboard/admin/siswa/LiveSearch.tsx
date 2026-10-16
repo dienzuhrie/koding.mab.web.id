@@ -67,16 +67,8 @@ export default function LiveSearch() {
                   Sudah punya akses
                 </span>
               ) : (
-                <form action={grantAccess} className="flex items-center gap-2">
+                <form action={grantAccess}>
                   <input type="hidden" name="userId" value={u.id} />
-                  <select
-                    name="role"
-                    defaultValue="siswa"
-                    className="text-xs font-bold border border-border-soft rounded-lg px-2 py-1.5"
-                  >
-                    <option value="siswa">Siswa</option>
-                    <option value="guru">Guru</option>
-                  </select>
                   <button
                     type="submit"
                     className="bg-brand-800 text-white text-xs font-bold px-3.5 py-1.5 rounded-full"

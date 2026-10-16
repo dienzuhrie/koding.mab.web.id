@@ -20,9 +20,9 @@ export default async function AdminSiswaPage() {
     <div>
       <h1 className="text-2xl font-extrabold mb-1">Kelola Siswa</h1>
       <p className="text-sm text-muted mb-7">
-        Cari akun SIMADU yang sudah ada lalu beri akses ke app koding ini.
-        Akun yang belum diberi akses di sini tidak bisa login, meskipun
-        emailnya valid di SIMADU.
+        Administrator dan semua GTK otomatis bisa login tanpa perlu diatur di
+        sini. Siswa aktif perlu dipilih dulu di bawah ini sebelum bisa login,
+        meskipun emailnya valid di SIMADU.
       </p>
 
       <LiveSearch />
@@ -50,7 +50,7 @@ export default async function AdminSiswaPage() {
                 {a.user.siswa?.kelas && ` · ${a.user.siswa.kelas.namaKelas}`}
               </div>
             </div>
-            <AccessActions accessId={a.id} role={a.role} status={a.status} />
+            <AccessActions accessId={a.id} status={a.status} />
           </div>
         ))}
         {accessList.length === 0 && (

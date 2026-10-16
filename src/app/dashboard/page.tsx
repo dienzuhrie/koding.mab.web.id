@@ -198,7 +198,7 @@ async function GuruDashboard({ userName }: { userName: string }) {
     prisma.kodingBab.count(),
     prisma.kodingMateri.count(),
     prisma.kodingProject.count({ where: { status: "pending" } }),
-    prisma.kodingUserAccess.count({ where: { role: "siswa", status: "active" } }),
+    prisma.kodingUserAccess.count({ where: { status: "active" } }),
   ]);
 
   const quickActions = [

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
+import { SISWA_ROLE_ID } from "@/lib/simadu-roles";
 
 export async function searchUsers(query: string) {
   const q = query.trim();
@@ -10,14 +11,14 @@ export async function searchUsers(query: string) {
   const users = await prisma.user.findMany({
     where: {
       isActive: 1,
-      roleIdSimadu: 23, // 23 = role "Siswa" di SIMADU (lihat user_role, app='simadu')
+      roleIdSimadu: SISWA_ROLE_ID,
       OR: [{ nama: { contains: q } }, { email: { contains: q } }],
     },
     select: {
       id: true,
       nama: true,
       email: true,
-      kodingAccess: { select: { id: true } },
+      kodingAccess: { select: { id: true, status: true } },
     },
     take: 15,
   });
@@ -26,21 +27,18 @@ export async function searchUsers(query: string) {
     id: u.id,
     nama: u.nama,
     email: u.email,
-    hasAccess: !!u.kodingAccess,
+    hasAccess: !!u.kodingAccess && u.kodingAccess.status === "active",
   }));
 }
 
 export async function grantAccess(formData: FormData) {
   const userId = Number(formData.get("userId"));
-  const role = String(formData.get("role")) as "siswa" | "guru";
-  if (!userId || (role !== "siswa" && role !== "guru")) {
-    throw new Error("Data tidak valid.");
-  }
+  if (!userId) throw new Error("Data tidak valid.");
 
   await prisma.kodingUserAccess.upsert({
     where: { userId },
-    update: { role, status: "active" },
-    create: { userId, role, status: "active" },
+    update: { status: "active" },
+    create: { userId, status: "active" },
   });
 
   revalidatePath("/dashboard/admin/siswa");
@@ -57,13 +55,5 @@ export async function toggleStatus(accessId: number) {
     data: { status: access.status === "active" ? "inactive" : "active" },
   });
 
-  revalidatePath("/dashboard/admin/siswa");
-}
-
-export async function changeRole(accessId: number, role: "siswa" | "guru") {
-  await prisma.kodingUserAccess.update({
-    where: { id: accessId },
-    data: { role },
-  });
   revalidatePath("/dashboard/admin/siswa");
 }

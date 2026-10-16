@@ -1,7 +1,10 @@
--- Menjadikan akun kamu (sukafisika@gmail.com, user.id = 2 di tabel `user`)
--- sebagai guru pertama di app koding, supaya ada akun yang bisa login dan
--- mengelola materi/kuis sejak awal. Aman dijalankan berulang (upsert).
-
-INSERT INTO `koding_user_access` (`user_id`, `role`, `status`)
-VALUES (2, 'guru', 'active')
-ON DUPLICATE KEY UPDATE `role` = VALUES(`role`), `status` = VALUES(`status`);
+-- SUPERSEDED oleh 003_simplify_koding_user_access.sql.
+--
+-- Awalnya file ini menjadikan sukafisika@gmail.com guru pertama lewat baris
+-- di koding_user_access. Sejak skema akses diubah, Administrator & GTK
+-- (termasuk akun ini, role_id_simadu = 11) otomatis dapat akses "guru"
+-- langsung dari role_id_simadu -- tidak perlu baris apapun di tabel ini lagi.
+--
+-- Kalau baris lama dari file ini sempat ter-insert, migrasi 003 akan
+-- menghapusnya otomatis (DELETE ... WHERE role = 'guru') sebelum kolom
+-- `role` dihapus. Tidak ada aksi yang perlu dijalankan dari file ini lagi.

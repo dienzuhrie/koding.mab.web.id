@@ -56,22 +56,21 @@ model Kelas {
 // terhubung ke user.id lewat foreign key tapi tidak mengubah tabel lama.
 // ---------------------------------------------------------------------------
 
-enum KodingRole {
-  siswa
-  guru
-}
-
+// Akses Administrator & GTK ke app ini otomatis dari role_id_simadu (lihat
+// src/lib/simadu-roles.ts) -- tidak butuh baris di tabel manapun. Tabel ini
+// HANYA daftar siswa yang sudah dipilih admin untuk boleh login; siswa yang
+// tidak ada di sini (atau statusnya inactive) tetap ditolak meski emailnya
+// valid di SIMADU.
 enum KodingAccessStatus {
   active
   inactive
 }
 
 model KodingUserAccess {
-  id        Int                 @id @default(autoincrement())
-  userId    Int                 @unique @map("user_id")
-  role      KodingRole
-  status    KodingAccessStatus  @default(active)
-  createdAt DateTime            @default(now()) @map("created_at")
+  id        Int                @id @default(autoincrement())
+  userId    Int                @unique @map("user_id")
+  status    KodingAccessStatus @default(active)
+  createdAt DateTime           @default(now()) @map("created_at")
 
   user User @relation(fields: [userId], references: [id])
 

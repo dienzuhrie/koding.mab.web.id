@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { GTK_ADMIN_ROLE_IDS, SISWA_ROLE_ID } from "@/lib/simadu-roles";
 
 declare module "next-auth" {
   interface Session {
@@ -30,7 +31,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const password = credentials?.password as string | undefined;
         if (!email || !password) return null;
 
-        // user & koding_user_access: lihat README "Integrasi user existing".
+        // Skema akses: lihat README "Integrasi user existing".
+        // - Administrator & GTK (role_id_simadu) -> otomatis "guru".
+        // - Siswa -> harus dipilih admin lewat koding_user_access dulu.
         let user;
         try {
           user = await prisma.user.findFirst({
@@ -45,18 +48,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
 
-        if (!user || !user.kodingAccess || user.kodingAccess.status !== "active") {
-          return null;
-        }
+        if (!user) return null;
 
         const valid = await bcrypt.compare(password, user.password);
         if (!valid) return null;
+
+        let role: "siswa" | "guru" | null = null;
+        if (GTK_ADMIN_ROLE_IDS.includes(user.roleIdSimadu)) {
+          role = "guru";
+        } else if (
+          user.roleIdSimadu === SISWA_ROLE_ID &&
+          user.kodingAccess?.status === "active"
+        ) {
+          role = "siswa";
+        }
+
+        if (!role) return null;
 
         return {
           id: String(user.id),
           name: user.nama,
           email: user.email,
-          role: user.kodingAccess.role,
+          role,
         };
       },
     }),
