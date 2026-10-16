@@ -112,6 +112,24 @@ export function PanelToggleIcon({ className, size = 18 }: IconProps) {
   );
 }
 
+export function XIcon({ className, size = 18 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <path d="M18 6 6 18" />
+      <path d="M6 6l12 12" />
+    </svg>
+  );
+}
+
+export function EyeIcon({ className, size = 18 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">
+      <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
 export function RouteIcon({ className, size = 18 }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">

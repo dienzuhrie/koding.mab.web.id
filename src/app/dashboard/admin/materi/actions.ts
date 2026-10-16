@@ -36,7 +36,7 @@ export async function createMateri(formData: FormData) {
   });
   const urutan = (last?.urutan ?? 0) + 1;
 
-  await prisma.kodingMateri.create({
+  const materi = await prisma.kodingMateri.create({
     data: {
       babId,
       judul,
@@ -47,5 +47,8 @@ export async function createMateri(formData: FormData) {
     },
   });
 
-  revalidatePath("/dashboard/admin/materi");
+  // Tidak revalidatePath di sini: list di client sudah di-update optimis
+  // (lihat BabCard), biar simpan materi terasa instan tanpa animasi
+  // transisi halaman yang ikut terpicu oleh refresh RSC.
+  return materi;
 }

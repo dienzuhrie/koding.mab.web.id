@@ -1,11 +1,22 @@
 import { prisma } from "@/lib/prisma";
 import { createBab } from "./actions";
-import BabCard from "./BabCard";
+import MateriAccordion from "./MateriAccordion";
 
 export default async function AdminMateriPage() {
   const babs = await prisma.kodingBab.findMany({
     orderBy: { urutan: "asc" },
-    include: { materi: { orderBy: { urutan: "asc" } } },
+    include: {
+      materi: {
+        orderBy: { urutan: "asc" },
+        select: {
+          id: true,
+          judul: true,
+          tipe: true,
+          urlYoutube: true,
+          fileUrl: true,
+        },
+      },
+    },
   });
 
   return (
@@ -34,49 +45,7 @@ export default async function AdminMateriPage() {
         </form>
       </div>
 
-      <div className="flex flex-col gap-3.5 max-w-3xl">
-        {babs.map((bab, i) => (
-          <BabCard
-            key={bab.id}
-            babId={bab.id}
-            urutan={bab.urutan}
-            judul={bab.judul}
-            jumlahMateri={bab.materi.length}
-            defaultOpen={i === 0}
-          >
-            {bab.materi.map((m) => (
-              <div
-                key={m.id}
-                className="flex items-center gap-2.5 px-2.5 py-2.5 rounded-lg transition-colors hover:bg-brand-50/60"
-              >
-                <div
-                  className={`w-7.5 h-7.5 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold ${
-                    m.tipe === "video"
-                      ? "bg-red-50 text-red-600"
-                      : "bg-blue-50 text-blue-600"
-                  }`}
-                >
-                  {m.tipe === "video" ? "▶" : "📄"}
-                </div>
-                <div className="flex-1 text-sm font-bold">{m.judul}</div>
-                <span className="text-[10px] text-muted">
-                  {m.tipe === "video" ? "Video" : "Dokumen"}
-                </span>
-              </div>
-            ))}
-            {bab.materi.length === 0 && (
-              <div className="px-2.5 py-2 text-xs text-muted">
-                Belum ada materi ditambahkan
-              </div>
-            )}
-          </BabCard>
-        ))}
-        {babs.length === 0 && (
-          <p className="text-sm text-muted">
-            Belum ada BAB. Tambahkan BAB pertama di atas.
-          </p>
-        )}
-      </div>
+      <MateriAccordion babs={babs} />
     </div>
   );
 }

@@ -1,18 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { FileTextIcon } from "@/components/icons";
-
-const tipeLabel: Record<string, string> = {
-  lks: "LKS",
-  ppt: "PPT",
-  materi: "Materi",
-  lainnya: "Lainnya",
-};
-const tipeClass: Record<string, string> = {
-  lks: "bg-amber-50 text-amber-700",
-  ppt: "bg-orange-50 text-orange-700",
-  materi: "bg-blue-50 text-blue-700",
-  lainnya: "bg-gray-100 text-gray-600",
-};
+import BahanCard from "./BahanCard";
 
 export default async function PathwayPage() {
   const pertemuan = await prisma.kodingPertemuan.findMany({
@@ -46,23 +33,12 @@ export default async function PathwayPage() {
             </div>
             <div className="p-3.5 flex flex-col gap-1.5">
               {p.bahan.map((b) => (
-                <a
+                <BahanCard
                   key={b.id}
-                  href={b.fileUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="card-lift flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-brand-50/60"
-                >
-                  <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 bg-blue-50 text-blue-600">
-                    <FileTextIcon size={17} />
-                  </div>
-                  <div className="flex-1 text-sm font-bold">{b.judul}</div>
-                  <span
-                    className={`text-[10px] font-bold px-2 py-1 rounded-full ${tipeClass[b.tipe]}`}
-                  >
-                    {tipeLabel[b.tipe]}
-                  </span>
-                </a>
+                  judul={b.judul}
+                  tipe={b.tipe}
+                  fileUrl={b.fileUrl}
+                />
               ))}
               {p.bahan.length === 0 && (
                 <div className="px-3 py-2.5 text-xs text-muted">

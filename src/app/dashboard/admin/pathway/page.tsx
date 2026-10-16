@@ -1,15 +1,8 @@
 import { prisma } from "@/lib/prisma";
-import { FileTextIcon } from "@/components/icons";
 import { createPertemuan } from "./actions";
 import BahanForm from "./BahanForm";
 import PertemuanCard from "./PertemuanCard";
-
-const tipeLabel: Record<string, string> = {
-  lks: "LKS",
-  ppt: "PPT",
-  materi: "Materi",
-  lainnya: "Lainnya",
-};
+import BahanItem from "./BahanItem";
 
 export default async function AdminPathwayPage() {
   const pertemuan = await prisma.kodingPertemuan.findMany({
@@ -55,21 +48,12 @@ export default async function AdminPathwayPage() {
               defaultOpen={i === 0}
             >
               {p.bahan.map((b) => (
-                <a
+                <BahanItem
                   key={b.id}
-                  href={b.fileUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-2.5 px-2.5 py-2.5 rounded-lg transition-colors hover:bg-brand-50/60"
-                >
-                  <div className="w-7.5 h-7.5 rounded-lg flex items-center justify-center shrink-0 bg-blue-50 text-blue-600">
-                    <FileTextIcon size={15} />
-                  </div>
-                  <div className="flex-1 text-sm font-bold">{b.judul}</div>
-                  <span className="text-[10px] text-muted">
-                    {tipeLabel[b.tipe]}
-                  </span>
-                </a>
+                  judul={b.judul}
+                  tipe={b.tipe}
+                  fileUrl={b.fileUrl}
+                />
               ))}
               {p.bahan.length === 0 && (
                 <div className="px-2.5 py-2 text-xs text-muted">

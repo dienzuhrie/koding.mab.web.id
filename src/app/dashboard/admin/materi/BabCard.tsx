@@ -1,55 +1,93 @@
 "use client";
 
-import { useState, useTransition, type ReactNode } from "react";
+import { useState, useTransition } from "react";
 import { ChevronDownIcon } from "@/components/icons";
+import PreviewModal from "@/components/PreviewModal";
 import { createMateri } from "./actions";
+
+type Materi = {
+  id: number;
+  judul: string;
+  tipe: "video" | "dokumen";
+  urlYoutube: string | null;
+  fileUrl: string | null;
+};
 
 export default function BabCard({
   babId,
   urutan,
   judul,
-  jumlahMateri,
-  defaultOpen = false,
-  children,
+  initialMateri,
+  isOpen,
+  onToggle,
 }: {
   babId: number;
   urutan: number;
   judul: string;
-  jumlahMateri: number;
-  defaultOpen?: boolean;
-  children: ReactNode;
+  initialMateri: Materi[];
+  isOpen: boolean;
+  onToggle: () => void;
 }) {
-  const [open, setOpen] = useState(defaultOpen);
+  const [materiList, setMateriList] = useState(initialMateri);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [preview, setPreview] = useState<Materi | null>(null);
 
   return (
     <div className="bg-white border border-border-soft rounded-2xl overflow-hidden">
       <button
         type="button"
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
+        onClick={onToggle}
+        aria-expanded={isOpen}
         className="w-full flex justify-between items-center gap-3 px-4.5 py-4 bg-brand-50 text-left transition-colors hover:bg-brand-100"
       >
         <div>
           <div className="text-[11px] font-bold text-brand-600">
-            BAB {urutan} · {jumlahMateri} materi
+            BAB {urutan} · {materiList.length} materi
           </div>
           <div className="text-[15px] font-extrabold">{judul}</div>
         </div>
         <ChevronDownIcon
           size={18}
           className={`shrink-0 text-brand-600 transition-transform duration-300 ${
-            open ? "rotate-180" : ""
+            isOpen ? "rotate-180" : ""
           }`}
         />
       </button>
       <div
         className={`grid transition-all duration-300 ease-in-out ${
-          open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
         }`}
       >
         <div className="overflow-hidden">
-          <div className="px-3.5 py-2.5 flex flex-col gap-1.5">{children}</div>
+          <div className="px-3.5 py-2.5 flex flex-col gap-1.5">
+            {materiList.map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => setPreview(m)}
+                className="flex items-center gap-2.5 px-2.5 py-2.5 rounded-lg transition-colors hover:bg-brand-50/60 text-left"
+              >
+                <div
+                  className={`w-7.5 h-7.5 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold ${
+                    m.tipe === "video"
+                      ? "bg-red-50 text-red-600"
+                      : "bg-blue-50 text-blue-600"
+                  }`}
+                >
+                  {m.tipe === "video" ? "▶" : "📄"}
+                </div>
+                <div className="flex-1 text-sm font-bold">{m.judul}</div>
+                <span className="text-[10px] text-muted">
+                  {m.tipe === "video" ? "Video" : "Dokumen"} · Pratinjau
+                </span>
+              </button>
+            ))}
+            {materiList.length === 0 && (
+              <div className="px-2.5 py-2 text-xs text-muted">
+                Belum ada materi ditambahkan
+              </div>
+            )}
+          </div>
 
           <div className="px-3.5 pb-3.5">
             {!showAddForm ? (
@@ -63,21 +101,35 @@ export default function BabCard({
             ) : (
               <AddMateriForm
                 babId={babId}
+                onSaved={(materi) => {
+                  setMateriList((prev) => [...prev, materi]);
+                  setShowAddForm(false);
+                }}
                 onClose={() => setShowAddForm(false)}
               />
             )}
           </div>
         </div>
       </div>
+
+      <PreviewModal
+        open={!!preview}
+        onClose={() => setPreview(null)}
+        title={preview?.judul ?? ""}
+        youtubeUrl={preview?.urlYoutube}
+        fileUrl={preview?.fileUrl}
+      />
     </div>
   );
 }
 
 function AddMateriForm({
   babId,
+  onSaved,
   onClose,
 }: {
   babId: number;
+  onSaved: (materi: Materi) => void;
   onClose: () => void;
 }) {
   const [tipe, setTipe] = useState<"video" | "dokumen">("video");
@@ -90,8 +142,8 @@ function AddMateriForm({
     const formData = new FormData(e.currentTarget);
     startTransition(async () => {
       try {
-        await createMateri(formData);
-        onClose();
+        const materi = await createMateri(formData);
+        onSaved(materi);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Gagal menyimpan materi.");
       }
