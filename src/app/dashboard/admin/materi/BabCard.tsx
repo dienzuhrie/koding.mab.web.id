@@ -61,7 +61,7 @@ export default function BabCard({
                 type="button"
                 onClick={() => setEditingBab(true)}
                 title="Edit BAB"
-                className="btn-press p-1.5 rounded-lg text-brand-600 hover:bg-brand-100 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="btn-press p-1.5 rounded-lg text-brand-600 hover:bg-brand-100"
               >
                 ✎
               </button>
@@ -69,7 +69,7 @@ export default function BabCard({
                 type="button"
                 onClick={() => setConfirmDeleteBab(true)}
                 title="Hapus BAB"
-                className="btn-press p-1.5 rounded-lg text-brand-600 hover:text-red-600 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="btn-press p-1.5 rounded-lg text-brand-600 hover:text-red-600 hover:bg-red-50"
               >
                 🗑
               </button>

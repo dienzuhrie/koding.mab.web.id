@@ -60,7 +60,7 @@ export default function PertemuanCard({
                 type="button"
                 onClick={() => setEditing(true)}
                 title="Edit Pertemuan"
-                className="btn-press p-1.5 rounded-lg text-brand-600 hover:bg-brand-100 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="btn-press p-1.5 rounded-lg text-brand-600 hover:bg-brand-100"
               >
                 ✎
               </button>
@@ -68,7 +68,7 @@ export default function PertemuanCard({
                 type="button"
                 onClick={() => setConfirmDelete(true)}
                 title="Hapus Pertemuan"
-                className="btn-press p-1.5 rounded-lg text-brand-600 hover:text-red-600 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="btn-press p-1.5 rounded-lg text-brand-600 hover:text-red-600 hover:bg-red-50"
               >
                 🗑
               </button>
