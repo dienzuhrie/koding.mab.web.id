@@ -15,6 +15,8 @@ declare module "next-auth" {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
+  secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" },
   pages: { signIn: "/login" },
   providers: [
@@ -29,10 +31,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!email || !password) return null;
 
         // user & koding_user_access: lihat README "Integrasi user existing".
-        const user = await prisma.user.findFirst({
-          where: { email, isActive: 1 },
-          include: { kodingAccess: true },
-        });
+        let user;
+        try {
+          user = await prisma.user.findFirst({
+            where: { email, isActive: 1 },
+            include: { kodingAccess: true },
+          });
+        } catch (err) {
+          console.error(
+            "[auth] Query ke tabel user/koding_user_access gagal — sudah jalankan prisma/manual-migrations/*.sql?",
+            err
+          );
+          return null;
+        }
 
         if (!user || !user.kodingAccess || user.kodingAccess.status !== "active") {
           return null;
