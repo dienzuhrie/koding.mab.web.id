@@ -39,7 +39,7 @@ export default function LiveSearch() {
   return (
     <div className="max-w-xl mb-10">
       <label className="block text-xs font-bold text-muted mb-1.5">
-        Cari nama atau email (SIMADU)
+        Cari siswa aktif (nama atau email SIMADU)
       </label>
       <input
         value={query}

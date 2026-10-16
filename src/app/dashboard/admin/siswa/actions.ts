@@ -10,6 +10,7 @@ export async function searchUsers(query: string) {
   const users = await prisma.user.findMany({
     where: {
       isActive: 1,
+      roleIdSimadu: 23, // 23 = role "Siswa" di SIMADU (lihat user_role, app='simadu')
       OR: [{ nama: { contains: q } }, { email: { contains: q } }],
     },
     select: {
