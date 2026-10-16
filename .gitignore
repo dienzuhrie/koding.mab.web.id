@@ -33,8 +33,15 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# user-uploaded content (materi dokumen & project siswa)
+/public/uploads/*
+!/public/uploads/.gitkeep
+
 # vercel
 .vercel
+
+# claude code session state
+.claude/
 
 # typescript
 *.tsbuildinfo

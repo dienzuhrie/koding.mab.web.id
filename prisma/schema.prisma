@@ -1,0 +1,207 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Tabel existing milik SIMADU (dibaca saja, tidak pernah ditulis dari app ini,
+// kecuali kolom yang eksplisit dicatat). Skema lama tidak diubah sama sekali.
+// ---------------------------------------------------------------------------
+
+model User {
+  id           Int    @id @default(autoincrement())
+  nama         String
+  email        String
+  password     String
+  foto         String
+  roleIdSimadu Int    @map("role_id_simadu")
+  isActive     Int    @map("is_active")
+
+  siswa        Siswa?
+  kodingAccess KodingUserAccess?
+  progress     KodingProgressMateri[]
+  hasilKuis    KodingHasilKuis[]
+  projects     KodingProject[]
+
+  @@map("user")
+}
+
+model Siswa {
+  id      Int @id @default(autoincrement())
+  userId  Int @unique @map("user_id")
+  nama    String
+  kelasId Int @map("kelas_id")
+
+  user  User  @relation(fields: [userId], references: [id])
+  kelas Kelas @relation(fields: [kelasId], references: [idKelas])
+
+  @@map("siswa")
+}
+
+model Kelas {
+  idKelas   Int    @id @map("id_kelas")
+  namaKelas String @map("nama_kelas")
+
+  siswa Siswa[]
+
+  @@map("kelas")
+}
+
+// ---------------------------------------------------------------------------
+// Tabel baru khusus app "Full Stack Developer MAB" (prefix koding_), additive,
+// terhubung ke user.id lewat foreign key tapi tidak mengubah tabel lama.
+// ---------------------------------------------------------------------------
+
+enum KodingRole {
+  siswa
+  guru
+}
+
+enum KodingAccessStatus {
+  active
+  inactive
+}
+
+model KodingUserAccess {
+  id        Int                 @id @default(autoincrement())
+  userId    Int                 @unique @map("user_id")
+  role      KodingRole
+  status    KodingAccessStatus  @default(active)
+  createdAt DateTime            @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("koding_user_access")
+}
+
+model KodingBab {
+  id         Int      @id @default(autoincrement())
+  judul      String
+  deskripsi  String?  @db.Text
+  urutan     Int
+  isPublished Boolean @default(true) @map("is_published")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  materi KodingMateri[]
+  kuis   KodingKuis[]
+
+  @@map("koding_bab")
+}
+
+enum KodingMateriTipe {
+  video
+  dokumen
+}
+
+model KodingMateri {
+  id         Int              @id @default(autoincrement())
+  babId      Int              @map("bab_id")
+  judul      String
+  tipe       KodingMateriTipe
+  urlYoutube String?          @map("url_youtube")
+  fileUrl    String?          @map("file_url")
+  urutan     Int
+  createdAt  DateTime         @default(now()) @map("created_at")
+
+  bab      KodingBab               @relation(fields: [babId], references: [id])
+  progress KodingProgressMateri[]
+
+  @@map("koding_materi")
+}
+
+enum KodingProgressStatus {
+  locked
+  in_progress
+  selesai
+}
+
+model KodingProgressMateri {
+  id          Int                   @id @default(autoincrement())
+  userId      Int                   @map("user_id")
+  materiId    Int                   @map("materi_id")
+  status      KodingProgressStatus  @default(locked)
+  completedAt DateTime?             @map("completed_at")
+
+  user   User         @relation(fields: [userId], references: [id])
+  materi KodingMateri @relation(fields: [materiId], references: [id])
+
+  @@unique([userId, materiId])
+  @@map("koding_progress_materi")
+}
+
+model KodingKuis {
+  id        Int      @id @default(autoincrement())
+  babId     Int      @map("bab_id")
+  judul     String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  bab       KodingBab         @relation(fields: [babId], references: [id])
+  soal      KodingSoal[]
+  hasil     KodingHasilKuis[]
+
+  @@map("koding_kuis")
+}
+
+model KodingSoal {
+  id          Int    @id @default(autoincrement())
+  kuisId      Int    @map("kuis_id")
+  pertanyaan  String @db.Text
+  urutan      Int
+
+  kuis KodingKuis   @relation(fields: [kuisId], references: [id])
+  opsi KodingOpsi[]
+
+  @@map("koding_soal")
+}
+
+model KodingOpsi {
+  id        Int     @id @default(autoincrement())
+  soalId    Int     @map("soal_id")
+  label     String
+  isCorrect Boolean @default(false) @map("is_correct")
+
+  soal KodingSoal @relation(fields: [soalId], references: [id])
+
+  @@map("koding_opsi")
+}
+
+model KodingHasilKuis {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  kuisId    Int      @map("kuis_id")
+  skor      Int
+  selesaiAt DateTime @default(now()) @map("selesai_at")
+
+  user User       @relation(fields: [userId], references: [id])
+  kuis KodingKuis @relation(fields: [kuisId], references: [id])
+
+  @@map("koding_hasil_kuis")
+}
+
+enum KodingProjectStatus {
+  pending
+  diterima
+  revisi
+}
+
+model KodingProject {
+  id          Int                 @id @default(autoincrement())
+  userId      Int                 @map("user_id")
+  judul       String
+  deskripsi   String?             @db.Text
+  fileUrl     String?             @map("file_url")
+  linkDemo    String?             @map("link_demo")
+  linkGithub  String?             @map("link_github")
+  status      KodingProjectStatus @default(pending)
+  catatanGuru String?             @db.Text @map("catatan_guru")
+  isFeatured  Boolean             @default(false) @map("is_featured")
+  createdAt   DateTime            @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("koding_project")
+}
