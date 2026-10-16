@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import PreviewModal from "@/components/PreviewModal";
 import { EyeIcon, FileTextIcon } from "@/components/icons";
+import { getFileTypeMeta } from "@/lib/fileType";
 import { updateBahan, deleteBahan } from "./actions";
 
 export type Bahan = {
@@ -51,6 +52,8 @@ export default function BahanRow({
     );
   }
 
+  const fileMeta = getFileTypeMeta(bahan.fileUrl);
+
   return (
     <div className="group flex items-center gap-2.5 px-2.5 py-2.5 rounded-lg transition-colors hover:bg-brand-50/60">
       <button
@@ -58,7 +61,7 @@ export default function BahanRow({
         onClick={() => setPreview(true)}
         className="flex items-center gap-2.5 flex-1 min-w-0 text-left"
       >
-        <div className="w-7.5 h-7.5 rounded-lg flex items-center justify-center shrink-0 bg-blue-50 text-blue-600">
+        <div className={`w-7.5 h-7.5 rounded-lg flex items-center justify-center shrink-0 ${fileMeta.bg} ${fileMeta.text}`}>
           <FileTextIcon size={15} />
         </div>
         <div className="flex-1 min-w-0 text-sm font-bold truncate">

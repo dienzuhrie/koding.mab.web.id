@@ -70,7 +70,7 @@ export default function PathwayAccordion({
             pertemuanId={p.id}
             urutan={p.urutan}
             judul={p.judul}
-            initialBahan={p.bahan}
+            bahan={p.bahan}
             isOpen={openId === p.id}
             onToggle={() => setOpenId((cur) => (cur === p.id ? null : p.id))}
             onPertemuanUpdated={(updated) =>
@@ -84,6 +84,29 @@ export default function PathwayAccordion({
               setPertemuan((prev) => prev.filter((x) => x.id !== id));
               setOpenId((cur) => (cur === id ? null : cur));
             }}
+            onBahanUpdated={(updated) =>
+              setPertemuan((prev) =>
+                prev.map((x) =>
+                  x.id === p.id
+                    ? {
+                        ...x,
+                        bahan: x.bahan.map((b) =>
+                          b.id === updated.id ? updated : b
+                        ),
+                      }
+                    : x
+                )
+              )
+            }
+            onBahanDeleted={(bahanId) =>
+              setPertemuan((prev) =>
+                prev.map((x) =>
+                  x.id === p.id
+                    ? { ...x, bahan: x.bahan.filter((b) => b.id !== bahanId) }
+                    : x
+                )
+              )
+            }
           />
         ))}
         {pertemuan.length === 0 && (

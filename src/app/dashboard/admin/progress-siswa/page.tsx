@@ -63,7 +63,7 @@ export default async function ProgressSiswaPage() {
       <div className="bg-white border border-border-soft rounded-2xl overflow-hidden max-w-4xl">
         <div className="grid grid-cols-[1fr_auto_auto] sm:grid-cols-[2fr_1fr_1fr] gap-3 px-5 py-3 bg-brand-50 text-[11px] font-bold text-brand-600 uppercase tracking-wide">
           <div>Siswa</div>
-          <div className="text-center">Materi Belajar</div>
+          <div className="text-center">Materi Pendukung</div>
           <div className="text-center">Pathway Dibuka</div>
         </div>
 

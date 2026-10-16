@@ -78,9 +78,9 @@ export default async function BabDetailPage({
         yang sebelumnya selesai, seperti peta perjalanan game.
       </p>
 
-      <div className="flex flex-col lg:flex-row gap-7 items-start">
+      <div className="flex flex-col xl:flex-row gap-7 items-start">
         {/* Timeline ringkas */}
-        <div className="w-full lg:w-[260px] shrink-0">
+        <div className="w-full xl:w-[260px] shrink-0">
           {withStatus.map(({ materi, status }, i) => (
             <div key={materi.id}>
               <div
@@ -147,7 +147,7 @@ export default async function BabDetailPage({
         </div>
 
         {/* Panel materi saat ini */}
-        <div className="flex-1 w-full lg:sticky lg:top-6">
+        <div className="flex-1 min-w-0 w-full xl:sticky xl:top-6">
           {current ? (
             <div className="reveal bg-brand-900 rounded-2xl p-5.5">
               <div className="text-accent-300 text-xs font-bold mb-2.5">

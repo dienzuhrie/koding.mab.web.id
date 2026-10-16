@@ -9,10 +9,10 @@ export default async function PathwayPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-extrabold mb-1">Pathway</h1>
+      <h1 className="text-2xl font-extrabold mb-1">Pathway Belajar</h1>
       <p className="text-sm text-muted mb-9 max-w-xl">
         Ini acuan utama proses belajar kamu — ikuti bahan ajar per pertemuan
-        di bawah ini. Menu Materi Belajar (video) sifatnya hanya referensi
+        di bawah ini. Menu Materi Pendukung (video) sifatnya hanya referensi
         tambahan.
       </p>
 

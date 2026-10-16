@@ -24,15 +24,15 @@ type NavItem = {
 
 const siswaNav: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: HomeIcon },
-  { href: "/dashboard/pathway", label: "Pathway", icon: RouteIcon },
-  { href: "/dashboard/materi", label: "Materi Belajar", icon: BookIcon },
+  { href: "/dashboard/pathway", label: "Pathway Belajar", icon: RouteIcon },
+  { href: "/dashboard/materi", label: "Materi Pendukung", icon: BookIcon },
   { href: "/dashboard/kuis", label: "Kuis", icon: HelpIcon },
   { href: "/dashboard/project", label: "Project", icon: BriefcaseIcon },
 ];
 
 const guruNav: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: HomeIcon },
-  { href: "/dashboard/admin/pathway", label: "Kelola Pathway", icon: RouteIcon },
+  { href: "/dashboard/admin/pathway", label: "Kelola Pathway Belajar", icon: RouteIcon },
   { href: "/dashboard/admin/materi", label: "Kelola Materi", icon: LayersIcon },
   { href: "/dashboard/admin/kuis", label: "Kelola Kuis", icon: ClipboardCheckIcon },
   { href: "/dashboard/admin/siswa", label: "Kelola Siswa", icon: UsersIcon },
@@ -60,7 +60,7 @@ export default function Sidebar({ role }: { role: "siswa" | "guru" }) {
     }
   }, []);
 
-  // Auto-collapse saat siswa membuka Materi Belajar, supaya video lebih lega.
+  // Auto-collapse saat siswa membuka Materi Pendukung, supaya video lebih lega.
   useEffect(() => {
     if (pathname.startsWith("/dashboard/materi")) {
       setCollapsed(true);

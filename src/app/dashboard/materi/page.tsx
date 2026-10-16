@@ -20,10 +20,10 @@ export default async function MateriListPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-extrabold mb-1">Materi Belajar</h1>
+      <h1 className="text-2xl font-extrabold mb-1">Materi Pendukung</h1>
       <p className="text-sm text-muted mb-7 max-w-lg">
         Video referensi tambahan, bukan acuan utama — untuk bahan ajar
-        pertemuan (LKS, PPT, materi) buka menu <strong>Pathway</strong>.
+        pertemuan (LKS, PPT, materi) buka menu <strong>Pathway Belajar</strong>.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

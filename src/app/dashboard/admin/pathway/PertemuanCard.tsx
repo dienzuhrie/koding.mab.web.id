@@ -9,22 +9,25 @@ export default function PertemuanCard({
   pertemuanId,
   urutan,
   judul,
-  initialBahan,
+  bahan: bahanList,
   isOpen,
   onToggle,
   onPertemuanUpdated,
   onPertemuanDeleted,
+  onBahanUpdated,
+  onBahanDeleted,
 }: {
   pertemuanId: number;
   urutan: number;
   judul: string;
-  initialBahan: Bahan[];
+  bahan: Bahan[];
   isOpen: boolean;
   onToggle: () => void;
   onPertemuanUpdated: (p: { id: number; judul: string }) => void;
   onPertemuanDeleted: (id: number) => void;
+  onBahanUpdated: (bahan: Bahan) => void;
+  onBahanDeleted: (id: number) => void;
 }) {
-  const [bahanList, setBahanList] = useState(initialBahan);
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -102,14 +105,8 @@ export default function PertemuanCard({
               <BahanRow
                 key={b.id}
                 bahan={b}
-                onUpdated={(updated) =>
-                  setBahanList((prev) =>
-                    prev.map((x) => (x.id === updated.id ? updated : x))
-                  )
-                }
-                onDeleted={(id) =>
-                  setBahanList((prev) => prev.filter((x) => x.id !== id))
-                }
+                onUpdated={onBahanUpdated}
+                onDeleted={onBahanDeleted}
               />
             ))}
             {bahanList.length === 0 && (

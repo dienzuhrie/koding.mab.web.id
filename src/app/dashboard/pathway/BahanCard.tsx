@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { FileTextIcon } from "@/components/icons";
 import PreviewModal from "@/components/PreviewModal";
+import { getFileTypeMeta } from "@/lib/fileType";
 import { markBahanViewed } from "./actions";
 
 const tipeLabel: Record<string, string> = {
@@ -36,6 +37,8 @@ export default function BahanCard({
     markBahanViewed(bahanId).catch(() => {});
   }
 
+  const fileMeta = getFileTypeMeta(fileUrl);
+
   return (
     <>
       <button
@@ -43,7 +46,7 @@ export default function BahanCard({
         onClick={handleOpen}
         className="card-lift flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-brand-50/60 text-left w-full"
       >
-        <div className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 bg-blue-50 text-blue-600">
+        <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${fileMeta.bg} ${fileMeta.text}`}>
           <FileTextIcon size={17} />
         </div>
         <div className="flex-1 text-sm font-bold">{judul}</div>

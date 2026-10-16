@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import PreviewModal from "@/components/PreviewModal";
 import { EyeIcon } from "@/components/icons";
+import { youtubeThumbnail } from "@/lib/youtube";
 import { updateMateri, deleteMateri } from "./actions";
 
 export type Materi = {
@@ -39,6 +40,10 @@ export default function MateriRow({
     );
   }
 
+  const thumb = materi.tipe === "video" && materi.urlYoutube
+    ? youtubeThumbnail(materi.urlYoutube)
+    : null;
+
   return (
     <div className="group flex items-center gap-2.5 px-2.5 py-2.5 rounded-lg transition-colors hover:bg-brand-50/60">
       <button
@@ -46,15 +51,25 @@ export default function MateriRow({
         onClick={() => setPreview(true)}
         className="flex items-center gap-2.5 flex-1 min-w-0 text-left"
       >
-        <div
-          className={`w-7.5 h-7.5 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold ${
-            materi.tipe === "video"
-              ? "bg-red-50 text-red-600"
-              : "bg-blue-50 text-blue-600"
-          }`}
-        >
-          {materi.tipe === "video" ? "▶" : "📄"}
-        </div>
+        {thumb ? (
+          <div className="relative w-12 h-8 rounded-md overflow-hidden shrink-0 bg-black">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={thumb} alt="" className="w-full h-full object-cover" />
+            <span className="absolute inset-0 flex items-center justify-center text-white text-[10px]">
+              ▶
+            </span>
+          </div>
+        ) : (
+          <div
+            className={`w-7.5 h-7.5 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold ${
+              materi.tipe === "video"
+                ? "bg-red-50 text-red-600"
+                : "bg-blue-50 text-blue-600"
+            }`}
+          >
+            {materi.tipe === "video" ? "▶" : "📄"}
+          </div>
+        )}
         <div className="flex-1 min-w-0 text-sm font-bold truncate">
           {materi.judul}
         </div>

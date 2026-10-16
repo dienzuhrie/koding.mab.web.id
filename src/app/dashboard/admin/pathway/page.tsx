@@ -15,10 +15,10 @@ export default async function AdminPathwayPage() {
   return (
     <div>
       <div className="mb-7">
-        <h1 className="text-2xl font-extrabold mb-1">Kelola Pathway</h1>
+        <h1 className="text-2xl font-extrabold mb-1">Kelola Pathway Belajar</h1>
         <p className="text-sm text-muted max-w-lg">
           Upload LKS, PPT, dan materi per pertemuan — ini yang jadi acuan
-          utama siswa belajar. Materi Belajar (video) tetap ada sebagai
+          utama siswa belajar. Materi Pendukung (video) tetap ada sebagai
           referensi tambahan saja.
         </p>
       </div>

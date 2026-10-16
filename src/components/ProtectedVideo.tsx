@@ -1,5 +1,7 @@
 "use client";
 
+import { extractYoutubeId } from "@/lib/youtube";
+
 export default function ProtectedVideo({ youtubeUrl }: { youtubeUrl: string }) {
   const videoId = extractYoutubeId(youtubeUrl);
   const embedUrl = videoId
@@ -28,11 +30,4 @@ export default function ProtectedVideo({ youtubeUrl }: { youtubeUrl: string }) {
       </span>
     </div>
   );
-}
-
-function extractYoutubeId(url: string): string | null {
-  const match = url.match(
-    /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{6,})/
-  );
-  return match ? match[1] : null;
 }

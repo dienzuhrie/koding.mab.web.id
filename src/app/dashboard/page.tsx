@@ -130,7 +130,7 @@ async function SiswaDashboard({
           <RouteIcon size={20} />
         </div>
         <div className="flex-1">
-          <div className="font-extrabold text-sm">Pathway Pembelajaran</div>
+          <div className="font-extrabold text-sm">Pathway Belajar</div>
           <div className="text-xs text-muted">
             Acuan utama belajar kamu — LKS, PPT, dan materi per pertemuan
           </div>
@@ -227,7 +227,7 @@ async function GuruDashboard({ userName }: { userName: string }) {
     {
       href: "/dashboard/admin/pathway",
       icon: RouteIcon,
-      title: "Kelola Pathway",
+      title: "Kelola Pathway Belajar",
       desc: "Upload LKS, PPT, dan materi per pertemuan",
     },
     {
