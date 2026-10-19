@@ -35,6 +35,7 @@ export default function PreviewModal({
     fileUrl && typeof window !== "undefined"
       ? new URL(fileUrl, window.location.origin).toString()
       : fileUrl ?? "";
+  const isDocPreview = !youtubeUrl && !!fileUrl;
 
   return (
     <div
@@ -42,7 +43,11 @@ export default function PreviewModal({
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden flex flex-col shadow-2xl"
+        className={`bg-white rounded-2xl w-full overflow-hidden flex flex-col shadow-2xl ${
+          isDocPreview
+            ? "max-w-[96vw] lg:max-w-6xl max-h-[94vh]"
+            : "max-w-3xl max-h-[85vh]"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-border-soft">
@@ -61,12 +66,12 @@ export default function PreviewModal({
             ext === "pdf" ? (
               <iframe
                 src={fileUrl}
-                className="w-full h-[65vh] rounded-xl border border-border-soft bg-white"
+                className="w-full h-[85vh] rounded-xl border border-border-soft bg-white"
               />
             ) : previewableDocs.includes(ext ?? "") ? (
               <iframe
                 src={`https://docs.google.com/gview?url=${encodeURIComponent(absoluteUrl)}&embedded=true`}
-                className="w-full h-[65vh] rounded-xl border border-border-soft bg-white"
+                className="w-full h-[85vh] rounded-xl border border-border-soft bg-white"
               />
             ) : (
               <div className="flex flex-col items-center justify-center h-40 gap-3 text-sm text-muted">

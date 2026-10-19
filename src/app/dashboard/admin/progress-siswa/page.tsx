@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma";
+import StudentRow from "./StudentRow";
 
 export default async function ProgressSiswaPage() {
-  const [accessList, totalMateri, totalBahan] = await Promise.all([
+  const [accessList, materiList, bahanList] = await Promise.all([
     prisma.kodingUserAccess.findMany({
       where: { status: "active" },
       include: {
@@ -15,97 +16,99 @@ export default async function ProgressSiswaPage() {
         },
       },
     }),
-    prisma.kodingMateri.count({ where: { bab: { isPublished: true } } }),
-    prisma.kodingBahanAjar.count(),
+    prisma.kodingMateri.findMany({
+      where: { bab: { isPublished: true } },
+      orderBy: [{ bab: { urutan: "asc" } }, { urutan: "asc" }],
+      select: { id: true, judul: true, bab: { select: { urutan: true, judul: true } } },
+    }),
+    prisma.kodingBahanAjar.findMany({
+      orderBy: [{ pertemuan: { urutan: "asc" } }, { urutan: "asc" }],
+      select: {
+        id: true,
+        judul: true,
+        pertemuan: { select: { urutan: true, judul: true } },
+      },
+    }),
   ]);
 
   const userIds = accessList.map((a) => a.userId);
 
-  const [materiSelesaiRaw, pathwayViewRaw] = await Promise.all([
-    prisma.kodingProgressMateri.groupBy({
-      by: ["userId"],
+  const [completedMateri, viewedBahan] = await Promise.all([
+    prisma.kodingProgressMateri.findMany({
       where: { userId: { in: userIds }, status: "selesai" },
-      _count: { _all: true },
+      select: { userId: true, materiId: true },
     }),
-    prisma.kodingPathwayView.groupBy({
-      by: ["userId"],
+    prisma.kodingPathwayView.findMany({
       where: { userId: { in: userIds } },
-      _count: { _all: true },
+      select: { userId: true, bahanId: true },
     }),
   ]);
 
-  const materiSelesaiMap = new Map(
-    materiSelesaiRaw.map((r) => [r.userId, r._count._all])
-  );
-  const pathwayViewMap = new Map(
-    pathwayViewRaw.map((r) => [r.userId, r._count._all])
-  );
+  const completedSet = new Set(completedMateri.map((c) => `${c.userId}-${c.materiId}`));
+  const viewedSet = new Set(viewedBahan.map((v) => `${v.userId}-${v.bahanId}`));
+
+  const totalMateri = materiList.length;
+  const totalBahan = bahanList.length;
 
   const rows = accessList
-    .map((a) => ({
-      userId: a.userId,
-      nama: a.user.nama,
-      email: a.user.email,
-      kelas: a.user.siswa?.kelas?.namaKelas ?? "—",
-      materiSelesai: materiSelesaiMap.get(a.userId) ?? 0,
-      pathwayViewed: pathwayViewMap.get(a.userId) ?? 0,
-    }))
+    .map((a) => {
+      const userId = a.userId;
+      const materiChecklist = materiList.map((m) => ({
+        id: m.id,
+        judul: m.judul,
+        groupLabel: `BAB ${m.bab.urutan} · ${m.bab.judul}`,
+        done: completedSet.has(`${userId}-${m.id}`),
+      }));
+      const bahanChecklist = bahanList.map((b) => ({
+        id: b.id,
+        judul: b.judul,
+        groupLabel: `Pertemuan ${b.pertemuan.urutan} · ${b.pertemuan.judul}`,
+        done: viewedSet.has(`${userId}-${b.id}`),
+      }));
+
+      return {
+        userId,
+        nama: a.user.nama,
+        email: a.user.email,
+        kelas: a.user.siswa?.kelas?.namaKelas ?? "—",
+        materiSelesai: materiChecklist.filter((m) => m.done).length,
+        pathwayViewed: bahanChecklist.filter((b) => b.done).length,
+        materiChecklist,
+        bahanChecklist,
+      };
+    })
     .sort((a, b) => a.nama.localeCompare(b.nama));
 
   return (
     <div>
       <h1 className="text-2xl font-extrabold mb-1">Progress Siswa</h1>
       <p className="text-sm text-muted mb-7 max-w-xl">
-        Pantau materi yang sudah terbuka/selesai dan bahan ajar Pathway yang
-        sudah dibuka per siswa.
+        Klik siswa untuk melihat detail materi dan bahan Pathway Belajar yang
+        sudah/belum dikerjakan.
       </p>
 
       <div className="bg-white border border-border-soft rounded-2xl overflow-hidden max-w-4xl">
-        <div className="grid grid-cols-[1fr_auto_auto] sm:grid-cols-[2fr_1fr_1fr] gap-3 px-5 py-3 bg-brand-50 text-[11px] font-bold text-brand-600 uppercase tracking-wide">
+        <div className="grid grid-cols-[1fr_auto_auto_auto] sm:grid-cols-[2fr_1fr_1fr_auto] gap-3 px-5 py-3 bg-brand-50 text-[11px] font-bold text-brand-600 uppercase tracking-wide">
           <div>Siswa</div>
           <div className="text-center">Materi Pendukung</div>
           <div className="text-center">Pathway Dibuka</div>
+          <div />
         </div>
 
-        {rows.map((r) => {
-          const materiPct = totalMateri ? Math.round((r.materiSelesai / totalMateri) * 100) : 0;
-          const pathwayPct = totalBahan ? Math.round((r.pathwayViewed / totalBahan) * 100) : 0;
-          return (
-            <div
-              key={r.userId}
-              className="card-lift grid grid-cols-[1fr_auto_auto] sm:grid-cols-[2fr_1fr_1fr] gap-3 px-5 py-4 border-t border-border-soft items-center"
-            >
-              <div className="min-w-0">
-                <div className="text-sm font-bold truncate">{r.nama}</div>
-                <div className="text-xs text-muted truncate">
-                  {r.kelas} · {r.email}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-sm font-extrabold text-brand-800">
-                  {r.materiSelesai}/{totalMateri}
-                </div>
-                <div className="h-1.5 w-16 mx-auto bg-[#e3eee6] rounded-full overflow-hidden mt-1">
-                  <div
-                    className="h-full bg-brand-500"
-                    style={{ width: `${materiPct}%` }}
-                  />
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="text-sm font-extrabold text-brand-800">
-                  {r.pathwayViewed}/{totalBahan}
-                </div>
-                <div className="h-1.5 w-16 mx-auto bg-[#e3eee6] rounded-full overflow-hidden mt-1">
-                  <div
-                    className="h-full bg-accent-400"
-                    style={{ width: `${pathwayPct}%` }}
-                  />
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {rows.map((r) => (
+          <StudentRow
+            key={r.userId}
+            nama={r.nama}
+            email={r.email}
+            kelas={r.kelas}
+            materiSelesai={r.materiSelesai}
+            totalMateri={totalMateri}
+            pathwayViewed={r.pathwayViewed}
+            totalBahan={totalBahan}
+            materiChecklist={r.materiChecklist}
+            bahanChecklist={r.bahanChecklist}
+          />
+        ))}
 
         {rows.length === 0 && (
           <p className="text-sm text-muted px-5 py-6">
