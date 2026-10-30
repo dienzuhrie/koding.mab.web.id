@@ -36,5 +36,9 @@ export async function updatePrerequisite(formData: FormData) {
 }
 
 export async function deletePrerequisite(id: number) {
-  await prisma.kodingPrerequisite.delete({ where: { id } });
+  try {
+    await prisma.kodingPrerequisite.delete({ where: { id } });
+  } catch {
+    throw new Error("Gagal menghapus tools. Coba lagi.");
+  }
 }

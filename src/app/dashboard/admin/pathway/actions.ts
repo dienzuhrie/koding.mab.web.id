@@ -96,5 +96,14 @@ export async function updateBahan(formData: FormData) {
 }
 
 export async function deleteBahan(id: number) {
-  await prisma.kodingBahanAjar.delete({ where: { id } });
+  try {
+    // koding_pathway_view mencatat siswa yang sudah membuka bahan ini --
+    // itu cuma data pelacakan, aman dihapus bareng saat bahan ajarnya dihapus.
+    await prisma.$transaction([
+      prisma.kodingPathwayView.deleteMany({ where: { bahanId: id } }),
+      prisma.kodingBahanAjar.delete({ where: { id } }),
+    ]);
+  } catch {
+    throw new Error("Gagal menghapus bahan ajar. Coba lagi.");
+  }
 }
