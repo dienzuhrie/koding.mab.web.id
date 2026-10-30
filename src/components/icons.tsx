@@ -112,6 +112,19 @@ export function PanelToggleIcon({ className, size = 18 }: IconProps) {
   );
 }
 
+export function ListCheckIcon({ className, size = 18 }: IconProps) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" {...base} className={className} aria-hidden="true">
+      <path d="m3 6 2 2 3-3" />
+      <path d="M10 6h11" />
+      <path d="m3 13 2 2 3-3" />
+      <path d="M10 13h11" />
+      <path d="m3 20 2 2 3-3" />
+      <path d="M10 20h11" />
+    </svg>
+  );
+}
+
 export function XIcon({ className, size = 18 }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">

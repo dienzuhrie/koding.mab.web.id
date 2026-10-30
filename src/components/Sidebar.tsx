@@ -13,6 +13,7 @@ import {
   UsersIcon,
   RouteIcon,
   TrendUpIcon,
+  ListCheckIcon,
   PanelToggleIcon,
 } from "@/components/icons";
 
@@ -24,6 +25,7 @@ type NavItem = {
 
 const siswaNav: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: HomeIcon },
+  { href: "/dashboard/prerequisite", label: "Prerequisite", icon: ListCheckIcon },
   { href: "/dashboard/pathway", label: "Pathway Belajar", icon: RouteIcon },
   { href: "/dashboard/materi", label: "Materi Pendukung", icon: BookIcon },
   { href: "/dashboard/kuis", label: "Kuis", icon: HelpIcon },
@@ -32,6 +34,7 @@ const siswaNav: NavItem[] = [
 
 const guruNav: NavItem[] = [
   { href: "/dashboard", label: "Dashboard", icon: HomeIcon },
+  { href: "/dashboard/admin/prerequisite", label: "Kelola Prerequisite", icon: ListCheckIcon },
   { href: "/dashboard/admin/pathway", label: "Kelola Pathway Belajar", icon: RouteIcon },
   { href: "/dashboard/admin/materi", label: "Kelola Materi", icon: LayersIcon },
   { href: "/dashboard/admin/kuis", label: "Kelola Kuis", icon: ClipboardCheckIcon },

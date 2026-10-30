@@ -258,3 +258,20 @@ model KodingPathwayView {
   @@unique([userId, bahanId])
   @@map("koding_pathway_view")
 }
+
+// ---------------------------------------------------------------------------
+// Prerequisite: daftar tools (VS Code, XAMPP, dst) untuk persiapan environment
+// koding -- link download, deskripsi, dan video tutorial instalasi per tool.
+// ---------------------------------------------------------------------------
+
+model KodingPrerequisite {
+  id          Int      @id @default(autoincrement())
+  nama        String
+  deskripsi   String?  @db.Text
+  downloadUrl String?  @map("download_url")
+  videoUrl    String?  @map("video_url")
+  urutan      Int
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("koding_prerequisite")
+}

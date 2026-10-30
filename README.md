@@ -57,6 +57,8 @@ client di database `jtwodvjz_simadu`:
 4. `prisma/manual-migrations/005_pathway_view_tracking.sql` — tabel untuk
    melacak bahan ajar yang sudah dibuka siswa (dipakai halaman Progress
    Siswa).
+5. `prisma/manual-migrations/006_prerequisite_table.sql` — tabel untuk
+   fitur Prerequisite (tools persiapan environment koding).
 
 Memilih siswa dilakukan lewat UI (Kelola Siswa), tidak perlu insert SQL
 manual lagi untuk operasional sehari-hari.
