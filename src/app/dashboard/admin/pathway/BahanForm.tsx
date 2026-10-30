@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
+import FileDropzone from "@/components/FileDropzone";
 import { addBahan } from "./actions";
 import type { Bahan } from "./BahanRow";
 
@@ -22,6 +23,7 @@ export default function BahanForm({
 }) {
   const formRef = useRef<HTMLFormElement>(null);
   const [error, setError] = useState<string | null>(null);
+  const [dropzoneKey, setDropzoneKey] = useState(0);
   const [isPending, startTransition] = useTransition();
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -34,6 +36,7 @@ export default function BahanForm({
         const bahan = await addBahan(formData);
         onAdded(pertemuanId, bahan);
         formRef.current?.reset();
+        setDropzoneKey((k) => k + 1);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Gagal menyimpan.");
       }
@@ -101,12 +104,12 @@ export default function BahanForm({
           <label className="block text-xs font-bold text-brand-100 mb-1.5">
             Upload File (PDF/PPT/Word/ZIP)
           </label>
-          <input
-            type="file"
+          <FileDropzone
+            key={dropzoneKey}
             name="file"
             required
             accept=".pdf,.ppt,.pptx,.doc,.docx,.zip"
-            className="w-full text-xs text-brand-100"
+            hint="maks 25 MB"
           />
         </div>
 
