@@ -59,6 +59,17 @@ client di database `jtwodvjz_simadu`:
    Siswa).
 5. `prisma/manual-migrations/006_prerequisite_table.sql` — tabel untuk
    fitur Prerequisite (tools persiapan environment koding).
+6. `prisma/manual-migrations/007_target_belajar.sql` — tabel Target Belajar
+   per pertemuan (diatur guru, tampil di Pathway Belajar siswa).
+
+## Auto-update setelah deploy
+
+`npm run build` menjalankan `prebuild` yang menulis `.deploy-id` (ID unik per
+build). `next.config.ts` memakainya sebagai `deploymentId`, sehingga Next.js
+memaksa hard navigation bila tab lama berbicara dengan build baru. Tab yang
+didiamkan dicek oleh `VersionWatcher` lewat `/api/version` (tiap 2 menit dan
+saat tab difokuskan) lalu di-reload otomatis; bila pengguna sedang mengetik,
+muncul banner "Versi baru tersedia".
 
 Memilih siswa dilakukan lewat UI (Kelola Siswa), tidak perlu insert SQL
 manual lagi untuk operasional sehari-hari.

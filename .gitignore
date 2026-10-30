@@ -46,3 +46,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ID versi per build (ditulis otomatis oleh prebuild)
+/.deploy-id
