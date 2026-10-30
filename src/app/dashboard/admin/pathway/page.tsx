@@ -12,6 +12,22 @@ export default async function AdminPathwayPage() {
     },
   });
 
+  // Tabel target belajar baru (migrasi 007) -- jangan sampai halaman ini mati
+  // kalau migrasinya belum dijalankan.
+  const targetsByPertemuan = new Map<number, string[]>();
+  try {
+    const rows = await prisma.kodingTargetBelajar.findMany({
+      orderBy: [{ pertemuanId: "asc" }, { urutan: "asc" }],
+    });
+    for (const r of rows) {
+      const list = targetsByPertemuan.get(r.pertemuanId) ?? [];
+      list.push(r.teks);
+      targetsByPertemuan.set(r.pertemuanId, list);
+    }
+  } catch {
+    // dianggap belum ada target
+  }
+
   return (
     <div>
       <div className="mb-7">
@@ -23,7 +39,12 @@ export default async function AdminPathwayPage() {
         </p>
       </div>
 
-      <PathwayAccordion pertemuan={pertemuan} />
+      <PathwayAccordion
+        pertemuan={pertemuan.map((p) => ({
+          ...p,
+          targets: targetsByPertemuan.get(p.id) ?? [],
+        }))}
+      />
     </div>
   );
 }

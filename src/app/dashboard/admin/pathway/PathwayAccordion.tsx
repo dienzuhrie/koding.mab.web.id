@@ -6,7 +6,13 @@ import BahanForm from "./BahanForm";
 import { createPertemuan } from "./actions";
 import type { Bahan } from "./BahanRow";
 
-type Pertemuan = { id: number; urutan: number; judul: string; bahan: Bahan[] };
+type Pertemuan = {
+  id: number;
+  urutan: number;
+  judul: string;
+  bahan: Bahan[];
+  targets: string[];
+};
 
 export default function PathwayAccordion({
   pertemuan: initialPertemuan,
@@ -28,7 +34,7 @@ export default function PathwayAccordion({
     startTransition(async () => {
       try {
         const p = await createPertemuan(formData);
-        setPertemuan((prev) => [...prev, { ...p, bahan: [] }]);
+        setPertemuan((prev) => [...prev, { ...p, bahan: [], targets: [] }]);
         setOpenId(p.id);
         formRef.current?.reset();
       } catch (err) {
@@ -71,6 +77,12 @@ export default function PathwayAccordion({
             urutan={p.urutan}
             judul={p.judul}
             bahan={p.bahan}
+            targets={p.targets}
+            onTargetsSaved={(targets) =>
+              setPertemuan((prev) =>
+                prev.map((x) => (x.id === p.id ? { ...x, targets } : x))
+              )
+            }
             isOpen={openId === p.id}
             onToggle={() => setOpenId((cur) => (cur === p.id ? null : p.id))}
             onPertemuanUpdated={(updated) =>

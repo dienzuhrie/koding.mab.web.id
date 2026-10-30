@@ -8,6 +8,21 @@ export default async function PathwayPage() {
     include: { bahan: { orderBy: { urutan: "asc" } } },
   });
 
+  // Tabel target belajar (migrasi 007) -- halaman tetap jalan bila belum ada.
+  const targetsByPertemuan = new Map<number, string[]>();
+  try {
+    const rows = await prisma.kodingTargetBelajar.findMany({
+      orderBy: [{ pertemuanId: "asc" }, { urutan: "asc" }],
+    });
+    for (const r of rows) {
+      const list = targetsByPertemuan.get(r.pertemuanId) ?? [];
+      list.push(r.teks);
+      targetsByPertemuan.set(r.pertemuanId, list);
+    }
+  } catch {
+    // tanpa target
+  }
+
   return (
     <div>
       <h1 className="text-2xl font-extrabold mb-1">Pathway Belajar</h1>
@@ -32,6 +47,23 @@ export default async function PathwayPage() {
                 <p className="text-xs text-muted mt-1">{p.deskripsi}</p>
               )}
             </div>
+            {(targetsByPertemuan.get(p.id) ?? []).length > 0 && (
+              <div className="mx-3.5 mt-3.5 rounded-xl bg-accent-300/15 border border-accent-300/60 px-4 py-3">
+                <div className="text-[11px] font-bold text-brand-700 mb-1.5">
+                  TARGET BELAJAR
+                </div>
+                <ul className="flex flex-col gap-1.5 text-sm">
+                  {(targetsByPertemuan.get(p.id) ?? []).map((t, i) => (
+                    <li key={i} className="flex gap-2.5">
+                      <span className="mt-0.5 shrink-0 w-5 h-5 rounded-full bg-accent-400 text-brand-800 text-[11px] font-extrabold flex items-center justify-center">
+                        {i + 1}
+                      </span>
+                      <span>{t}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <div className="p-3.5 flex flex-col gap-1.5">
               {p.bahan.map((b) => (
                 <RowErrorBoundary key={b.id}>

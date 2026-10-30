@@ -28,6 +28,35 @@ export async function updatePertemuan(formData: FormData) {
   });
 }
 
+export async function saveTargetBelajar(pertemuanId: number, text: string) {
+  if (!pertemuanId) throw new Error("Pertemuan tidak valid.");
+
+  // Satu baris = satu target; buang bullet/nomor di awal, baris kosong, duplikat.
+  const targets = Array.from(
+    new Set(
+      text
+        .split(/\r?\n/)
+        .map((line) => line.replace(/^\s*(?:[-*•]|\d+[.)])\s*/, "").trim())
+        .filter(Boolean)
+        .map((line) => line.slice(0, 500))
+    )
+  ).slice(0, 30);
+
+  try {
+    await prisma.$transaction([
+      prisma.kodingTargetBelajar.deleteMany({ where: { pertemuanId } }),
+      prisma.kodingTargetBelajar.createMany({
+        data: targets.map((teks, i) => ({ pertemuanId, teks, urutan: i + 1 })),
+      }),
+    ]);
+  } catch {
+    throw new Error(
+      "Gagal menyimpan target belajar. Pastikan migrasi 007_target_belajar.sql sudah dijalankan."
+    );
+  }
+  return targets;
+}
+
 export async function deletePertemuan(id: number) {
   try {
     await prisma.kodingPertemuan.delete({ where: { id } });

@@ -3,7 +3,11 @@
 import { useState, useTransition } from "react";
 import { ChevronDownIcon } from "@/components/icons";
 import RowErrorBoundary from "@/components/RowErrorBoundary";
-import { updatePertemuan, deletePertemuan } from "./actions";
+import {
+  updatePertemuan,
+  deletePertemuan,
+  saveTargetBelajar,
+} from "./actions";
 import BahanRow, { type Bahan } from "./BahanRow";
 
 export default function PertemuanCard({
@@ -11,6 +15,8 @@ export default function PertemuanCard({
   urutan,
   judul,
   bahan: bahanList,
+  targets,
+  onTargetsSaved,
   isOpen,
   onToggle,
   onPertemuanUpdated,
@@ -22,6 +28,8 @@ export default function PertemuanCard({
   urutan: number;
   judul: string;
   bahan: Bahan[];
+  targets: string[];
+  onTargetsSaved: (targets: string[]) => void;
   isOpen: boolean;
   onToggle: () => void;
   onPertemuanUpdated: (p: { id: number; judul: string }) => void;
@@ -102,6 +110,11 @@ export default function PertemuanCard({
       >
         <div className="overflow-hidden">
           <div className="px-3.5 py-2.5 flex flex-col gap-1.5">
+            <TargetEditor
+              pertemuanId={pertemuanId}
+              targets={targets}
+              onSaved={onTargetsSaved}
+            />
             {bahanList.map((b) => (
               <RowErrorBoundary key={b.id}>
                 <BahanRow
@@ -119,6 +132,104 @@ export default function PertemuanCard({
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function TargetEditor({
+  pertemuanId,
+  targets,
+  onSaved,
+}: {
+  pertemuanId: number;
+  targets: string[];
+  onSaved: (targets: string[]) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [text, setText] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+
+  function handleSave() {
+    setError(null);
+    startTransition(async () => {
+      try {
+        onSaved(await saveTargetBelajar(pertemuanId, text));
+        setEditing(false);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Gagal menyimpan.");
+      }
+    });
+  }
+
+  return (
+    <div className="rounded-xl border border-accent-300/60 bg-accent-300/10 px-3 py-2.5 mb-1">
+      <div className="flex items-center justify-between gap-2">
+        <div className="text-[11px] font-bold text-brand-700">
+          TARGET BELAJAR · {targets.length}
+        </div>
+        {!editing && (
+          <button
+            type="button"
+            onClick={() => {
+              setText(targets.join("\n"));
+              setEditing(true);
+            }}
+            className="btn-press text-xs font-bold text-brand-700 px-2.5 py-1 rounded-lg hover:bg-white"
+          >
+            {targets.length ? "Ubah" : "+ Atur Target"}
+          </button>
+        )}
+      </div>
+
+      {editing ? (
+        <div className="reveal mt-2">
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            autoFocus
+            rows={5}
+            placeholder={
+              "Satu baris = satu target, contoh:\nMemahami struktur dasar PHP\nMampu membuat formulir dan membaca inputnya"
+            }
+            className="input-focus w-full px-3 py-2 rounded-lg border border-border-soft bg-white text-sm"
+          />
+          {error && (
+            <p className="text-xs font-semibold text-red-600 mt-1">{error}</p>
+          )}
+          <div className="flex gap-2 mt-2">
+            <button
+              type="button"
+              onClick={handleSave}
+              disabled={isPending}
+              className="btn-press bg-brand-700 text-white text-xs font-bold px-3 py-2 rounded-lg disabled:opacity-60"
+            >
+              {isPending ? "..." : "Simpan Target"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditing(false)}
+              disabled={isPending}
+              className="btn-press text-xs font-bold text-muted px-3 py-2 rounded-lg hover:bg-white"
+            >
+              Batal
+            </button>
+          </div>
+        </div>
+      ) : targets.length > 0 ? (
+        <ul className="mt-1.5 flex flex-col gap-1 text-xs">
+          {targets.map((t, i) => (
+            <li key={i} className="flex gap-2">
+              <span className="text-brand-600 font-bold">{i + 1}.</span>
+              <span>{t}</span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="mt-1 text-xs text-muted">
+          Belum ada target belajar untuk pertemuan ini.
+        </p>
+      )}
     </div>
   );
 }

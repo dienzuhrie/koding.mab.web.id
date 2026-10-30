@@ -219,9 +219,23 @@ model KodingPertemuan {
   urutan    Int
   createdAt DateTime @default(now()) @map("created_at")
 
-  bahan KodingBahanAjar[]
+  bahan   KodingBahanAjar[]
+  targets KodingTargetBelajar[]
 
   @@map("koding_pertemuan")
+}
+
+model KodingTargetBelajar {
+  id          Int      @id @default(autoincrement())
+  pertemuanId Int      @map("pertemuan_id")
+  teks        String   @db.VarChar(500)
+  urutan      Int
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  pertemuan KodingPertemuan @relation(fields: [pertemuanId], references: [id], onDelete: Cascade)
+
+  @@index([pertemuanId])
+  @@map("koding_target_belajar")
 }
 
 enum KodingBahanTipe {
