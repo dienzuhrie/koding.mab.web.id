@@ -222,7 +222,7 @@ function BahanEditForm({
         <input
           type="file"
           name="file"
-          accept=".pdf,.ppt,.pptx,.doc,.docx,.zip"
+          accept=".pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.zip"
           className="w-full text-xs text-muted"
         />
         <p className="text-[10px] text-muted mt-1">

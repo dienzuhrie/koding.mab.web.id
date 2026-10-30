@@ -102,13 +102,13 @@ export default function BahanForm({
 
         <div>
           <label className="block text-xs font-bold text-brand-100 mb-1.5">
-            Upload File (PDF/PPT/Word/ZIP)
+            Upload File (PDF/PPT/Word/Excel/ZIP)
           </label>
           <FileDropzone
             key={dropzoneKey}
             name="file"
             required
-            accept=".pdf,.ppt,.pptx,.doc,.docx,.zip"
+            accept=".pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx,.zip"
             hint="maks 25 MB"
           />
         </div>

@@ -3,9 +3,16 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import ProtectedVideo from "./ProtectedVideo";
+import OfficeViewer, { type OfficeKind } from "./OfficeViewer";
 import { XIcon } from "./icons";
 
-const previewableDocs = ["ppt", "pptx", "doc", "docx"];
+const officeKinds: Record<string, OfficeKind> = {
+  docx: "docx",
+  pptx: "pptx",
+  xlsx: "xlsx",
+};
+// Format biner lama tidak bisa dibaca di browser tanpa layanan eksternal.
+const legacyOffice = ["doc", "ppt", "xls"];
 
 export default function PreviewModal({
   open,
@@ -31,11 +38,8 @@ export default function PreviewModal({
 
   if (!open) return null;
 
-  const ext = fileUrl?.split(".").pop()?.toLowerCase();
-  const absoluteUrl =
-    fileUrl && typeof window !== "undefined"
-      ? new URL(fileUrl, window.location.origin).toString()
-      : fileUrl ?? "";
+  const ext = fileUrl?.split(".").pop()?.toLowerCase() ?? "";
+  const officeKind = officeKinds[ext];
   const isDocPreview = !youtubeUrl && !!fileUrl;
 
   return createPortal(
@@ -69,14 +73,13 @@ export default function PreviewModal({
                 src={fileUrl}
                 className="w-full h-[85vh] rounded-xl border border-border-soft bg-white"
               />
-            ) : previewableDocs.includes(ext ?? "") ? (
-              <iframe
-                src={`https://docs.google.com/gview?url=${encodeURIComponent(absoluteUrl)}&embedded=true`}
-                className="w-full h-[85vh] rounded-xl border border-border-soft bg-white"
-              />
+            ) : officeKind ? (
+              <OfficeViewer key={fileUrl} fileUrl={fileUrl} kind={officeKind} />
             ) : (
-              <div className="flex flex-col items-center justify-center h-40 gap-3 text-sm text-muted">
-                Format file ini tidak bisa dipratinjau langsung.
+              <div className="flex flex-col items-center justify-center h-40 gap-3 px-6 text-center text-sm text-muted">
+                {legacyOffice.includes(ext)
+                  ? `Format .${ext} versi lama tidak bisa dibuka langsung di sini. Simpan ulang sebagai .${ext}x agar bisa dipratinjau, atau unduh filenya.`
+                  : "Format file ini tidak bisa dipratinjau langsung."}
                 <a
                   href={fileUrl}
                   target="_blank"
