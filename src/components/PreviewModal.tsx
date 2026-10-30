@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import ProtectedVideo from "./ProtectedVideo";
 import { XIcon } from "./icons";
 
@@ -37,7 +38,7 @@ export default function PreviewModal({
       : fileUrl ?? "";
   const isDocPreview = !youtubeUrl && !!fileUrl;
 
-  return (
+  return createPortal(
     <div
       className="reveal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
       onClick={onClose}
@@ -105,6 +106,7 @@ export default function PreviewModal({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
