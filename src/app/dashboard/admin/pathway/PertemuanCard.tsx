@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { ChevronDownIcon } from "@/components/icons";
+import RowErrorBoundary from "@/components/RowErrorBoundary";
 import { updatePertemuan, deletePertemuan } from "./actions";
 import BahanRow, { type Bahan } from "./BahanRow";
 
@@ -102,12 +103,13 @@ export default function PertemuanCard({
         <div className="overflow-hidden">
           <div className="px-3.5 py-2.5 flex flex-col gap-1.5">
             {bahanList.map((b) => (
-              <BahanRow
-                key={b.id}
-                bahan={b}
-                onUpdated={onBahanUpdated}
-                onDeleted={onBahanDeleted}
-              />
+              <RowErrorBoundary key={b.id}>
+                <BahanRow
+                  bahan={b}
+                  onUpdated={onBahanUpdated}
+                  onDeleted={onBahanDeleted}
+                />
+              </RowErrorBoundary>
             ))}
             {bahanList.length === 0 && (
               <div className="px-2.5 py-2 text-xs text-muted">

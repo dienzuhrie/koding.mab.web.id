@@ -154,7 +154,11 @@ body {
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    /* "none" (not translateY(0)) so the animation's fill-mode: both does not
+       leave a permanent non-none transform on the element after it ends --
+       a lingering transform turns the element into a CSS containing block,
+       which breaks position: fixed on any descendant (e.g. PreviewModal). */
+    transform: none;
   }
 }
 .reveal {

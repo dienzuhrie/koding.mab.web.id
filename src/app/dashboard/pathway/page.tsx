@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import RowErrorBoundary from "@/components/RowErrorBoundary";
 import BahanCard from "./BahanCard";
 
 export default async function PathwayPage() {
@@ -33,13 +34,14 @@ export default async function PathwayPage() {
             </div>
             <div className="p-3.5 flex flex-col gap-1.5">
               {p.bahan.map((b) => (
-                <BahanCard
-                  key={b.id}
-                  bahanId={b.id}
-                  judul={b.judul}
-                  tipe={b.tipe}
-                  fileUrl={b.fileUrl}
-                />
+                <RowErrorBoundary key={b.id}>
+                  <BahanCard
+                    bahanId={b.id}
+                    judul={b.judul}
+                    tipe={b.tipe}
+                    fileUrl={b.fileUrl}
+                  />
+                </RowErrorBoundary>
               ))}
               {p.bahan.length === 0 && (
                 <div className="px-3 py-2.5 text-xs text-muted">

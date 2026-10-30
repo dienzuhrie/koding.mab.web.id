@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { ChevronDownIcon } from "@/components/icons";
+import RowErrorBoundary from "@/components/RowErrorBoundary";
 import { createMateri, updateBab, deleteBab } from "./actions";
 import MateriRow, { type Materi } from "./MateriRow";
 
@@ -100,18 +101,19 @@ export default function BabCard({
         <div className="overflow-hidden">
           <div className="px-3.5 py-2.5 flex flex-col gap-1.5">
             {materiList.map((m) => (
-              <MateriRow
-                key={m.id}
-                materi={m}
-                onUpdated={(updated) =>
-                  setMateriList((prev) =>
-                    prev.map((x) => (x.id === updated.id ? updated : x))
-                  )
-                }
-                onDeleted={(id) =>
-                  setMateriList((prev) => prev.filter((x) => x.id !== id))
-                }
-              />
+              <RowErrorBoundary key={m.id}>
+                <MateriRow
+                  materi={m}
+                  onUpdated={(updated) =>
+                    setMateriList((prev) =>
+                      prev.map((x) => (x.id === updated.id ? updated : x))
+                    )
+                  }
+                  onDeleted={(id) =>
+                    setMateriList((prev) => prev.filter((x) => x.id !== id))
+                  }
+                />
+              </RowErrorBoundary>
             ))}
             {materiList.length === 0 && (
               <div className="px-2.5 py-2 text-xs text-muted">
